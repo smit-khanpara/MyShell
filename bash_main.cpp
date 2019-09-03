@@ -3,10 +3,12 @@
 #include<sys/wait.h>
 #include <sstream>
 #include<string.h>
+#include <fcntl.h>
 #include<unordered_map>
 using namespace std;
 
 unordered_map<string, int> flag;
+int fdh;
 
 void init()
 {
@@ -18,6 +20,7 @@ void init()
 	cout << "*****************************************************************************" << endl;
 	cout << endl;
 
+	fdh = open("history.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
 }
 
 void prompt()
@@ -33,6 +36,56 @@ void prompt()
 	flag["|"] = 0;
 	flag[">>"] = 0;
 	flag[">"] = 0;
+}
+
+void redirection(char **cmd, char **file)
+{
+	int fd[2];
+	char buff[1024];
+
+	if (pipe(fd)==-1) 
+    { 
+        cout << "Pipe failed" << endl; 
+        return; 
+    } 
+
+	pid_t rid = fork();
+	
+	if(rid == -1)
+	{
+		cout << "Process creation failed!!" << endl;
+	} 
+	else if(rid == 0)
+	{
+		close(fd[0]); 
+        dup2(fd[1], STDOUT_FILENO); 
+        close(fd[1]);
+		if (execvp(cmd[0], cmd) < 0) 
+		{ 
+	           cout <<"Unable to execute command!!" << endl; 
+	    }
+	    exit(0);
+	}
+	else
+	{
+		int wfptr, lenIn, lenOut;
+		close(fd[1]);
+		wait(NULL);
+		if(flag[">"])
+			wfptr = open(file[0], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		else
+			wfptr = open(file[0], O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if(wfptr == -1)
+		{
+			cout << "Invalid file path : " << file[0] << endl;
+			return;
+		}
+		while((lenOut = read(fd[0], buff, 1024)) > 0)
+			lenIn = write(wfptr, buff, lenOut);
+
+		close(fd[0]);
+		return;
+	}
 }
 
 void parse_command(char **cmd, char *in)
@@ -86,11 +139,32 @@ void execute(char **arg)
 		exit(0);
 	}
 
+	if(!strcmp(arg[0],"cd"))
+	{
+		if(chdir(arg[1]) != 0)
+		{
+			cout << "cd: Assign: No such file or directory " << endl;
+		}
+		return;
+	}
+
+	if(!strcmp(arg[0],"history"))
+	{
+		char buffer[1024];
+		int rdh = open("history.txt", O_RDONLY);
+		
+		while(read(rdh, buffer, 1024) > 0)
+			cout << buffer;
+
+		close(rdh);
+		return;
+	}
+
 	pid_t rid = fork();
 	
 	if(rid == -1)
 	{
-		cout << "Failed!!" << endl;
+		cout << "Process creation failed!!" << endl;
 	} 
 	else if(rid == 0)
 	{
@@ -107,6 +181,7 @@ void execute(char **arg)
 	}
 }
 
+
 void parse_and_excute()
 { 	
 	char *arg[128];
@@ -114,8 +189,9 @@ void parse_and_excute()
    	char *input; 
    	char *temp1, *temp2;
     int i = 0;
-    fgets(buf, 1024, stdin); 
-    
+    fgets(buf, 1024, stdin);
+
+    write(fdh, buf, strlen(buf));
     input = strtok(buf, "\n");
 
     if(strstr(input, ">>"))
@@ -149,20 +225,17 @@ void parse_and_excute()
 	    arg[++i] = NULL;
     }
 
-	
 	if(flag["|"])
 	{
-		if(flag[">"] || flag[">>"])
-		{
-
-		}
+		
 	}
-	else if(flag[">"])
+	else if(flag[">"] || flag[">>"])
 	{
 		char *cmd[128];
 		parse_command(cmd, arg[0]);
 		char *file[128];
 		parse_command(file, arg[1]);
+		redirection(cmd, file); 
 	}
 	else
 	{

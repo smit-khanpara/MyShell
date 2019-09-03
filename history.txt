@@ -1,0 +1,13 @@
+ls -l
+cat history.txt
+bye
+kdf
+history
+cat history
+cat history.txt
+history
+history
+history 1
+clear
+s
+cp history.txt /home/smit/Study/OS/MyShell/
