@@ -11,3 +11,75 @@ history 1
 clear
 s
 cp history.txt /home/smit/Study/OS/MyShell/
+ls /home/smit/Study/OS/MyShell/
+rm /home/smit/Study/OS/Myshell/a.out
+rm /home/smit/Study/OS/MyShell/a.out
+ls /home/smit/Study/OS/MyShell/
+clear
+git status
+cd ..
+cd ..
+cd MyShell
+git status
+git add .
+git status
+git commit -m "history_cd_redirection"
+git push origin master
+git status
+clear
+ls -l | ls -l
+ls -l s d nf fnf mfmf mf mfm fm mf | echo "hwlo     " sss sss ddd ff gg hh
+shhshsh shshhshs | adada adada addada aaa ddd | dd ff gg hh ii jj kk ll mm | qq ww ee rr tt yy uu ii oo pp | zz xx vv bb nn mm ,,
+ls -l | ls -l
+ls -l | ls -l
+ls -k df dfd | dsf | df |df ds |df ds >> ss
+ls -l d|dfd|dfd|df|fd
+jdf|dfd|dfd|dfd|fd|df >> qwe
+exit
+cd ss ss
+cd aa
+history a
+history
+clear
+history
+history
+clear
+history
+history
+clear
+history
+history
+clear
+history
+clear
+clearclearalias
+alias l='ls -l'
+echo
+cat
+rm
+rm --help
+alias --help
+exit
+b
+ls -l
+k
+ls -l | ls -l
+clear
+exit
+alias
+clear
+ls -l | w | w
+ls | s > 3
+ > 3
+ls 
+cat 3
+hello > 3
+cat 3
+ls 
+cat 3
+cat '3'
+rm 3
+ls 
+hello > a.txt
+ls 
+cat a.txt

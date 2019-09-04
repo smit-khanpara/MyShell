@@ -38,6 +38,19 @@ void prompt()
 	flag[">"] = 0;
 }
 
+int cnt_arg(char **arg)
+{
+	int cnt = 0;
+	int i=0;
+	while(arg[i])
+	{
+		cnt++;
+		i++;
+	}
+
+	return cnt;
+}
+
 void redirection(char **cmd, char **file)
 {
 	int fd[2];
@@ -127,8 +140,7 @@ void parse_command(char **cmd, char *in)
 	    	i++;
 			cmd[i] = strtok(NULL, " ");
 	    }
-	}
-    
+	}  
 }
 
 void execute(char **arg)
@@ -141,6 +153,11 @@ void execute(char **arg)
 
 	if(!strcmp(arg[0],"cd"))
 	{
+		if(arg[2])
+		{
+			cout << "cd : too many arguments" << endl;
+			return;
+		}
 		if(chdir(arg[1]) != 0)
 		{
 			cout << "cd: Assign: No such file or directory " << endl;
@@ -150,14 +167,29 @@ void execute(char **arg)
 
 	if(!strcmp(arg[0],"history"))
 	{
+		if(arg[1])
+		{
+			cout << "try: history without any argument" << endl;
+			return;
+		}
+
 		char buffer[1024];
+		int ln;
 		int rdh = open("history.txt", O_RDONLY);
 		
-		while(read(rdh, buffer, 1024) > 0)
+		while((ln = read(rdh, buffer, 1023)) > 0)
+		{
+			buffer[ln] = '\0';
 			cout << buffer;
+		}	
 
 		close(rdh);
 		return;
+	}
+
+	if(!strcmp(arg[0],"alias"))
+	{
+
 	}
 
 	pid_t rid = fork();
@@ -181,6 +213,41 @@ void execute(char **arg)
 	}
 }
 
+void pipe(char **arg)
+{
+	int cnt = 0;
+	char *cmd[128];
+	int i = 0;
+
+	cnt = cnt_arg(arg);
+
+	if(flag[">"] || flag[">>"])
+		cnt--;
+
+	cout << cnt << endl;
+}
+
+void execute_cmd(char **arg)
+{
+	if(flag["|"])
+	{
+		pipe(arg);
+	}
+	else if(flag[">"] || flag[">>"])
+	{
+		char *cmd[128];
+		parse_command(cmd, arg[0]);
+		char *file[128];
+		parse_command(file, arg[1]);
+		redirection(cmd, file); 
+	}
+	else
+	{
+		char *cmd[128];
+		parse_command(cmd, arg[0]);
+		execute(cmd);
+	}
+}
 
 void parse_and_excute()
 { 	
@@ -225,24 +292,7 @@ void parse_and_excute()
 	    arg[++i] = NULL;
     }
 
-	if(flag["|"])
-	{
-		
-	}
-	else if(flag[">"] || flag[">>"])
-	{
-		char *cmd[128];
-		parse_command(cmd, arg[0]);
-		char *file[128];
-		parse_command(file, arg[1]);
-		redirection(cmd, file); 
-	}
-	else
-	{
-		char *cmd[128];
-		parse_command(cmd, arg[0]);
-		execute(cmd);
-	}
+    execute_cmd(arg);
 }
 
 int main()
