@@ -4,6 +4,7 @@
 #include <sstream>
 #include<string.h>
 #include <fcntl.h>
+#include<vector>
 #include<unordered_map>
 using namespace std;
 
@@ -51,96 +52,15 @@ int cnt_arg(char **arg)
 	return cnt;
 }
 
-void redirection(char **cmd, char **file)
+void print_cmd(char **cmd)
 {
-	int fd[2];
-	char buff[1024];
-
-	if (pipe(fd)==-1) 
-    { 
-        cout << "Pipe failed" << endl; 
-        return; 
-    } 
-
-	pid_t rid = fork();
-	
-	if(rid == -1)
+	int i=0;
+	while(cmd[i])
 	{
-		cout << "Process creation failed!!" << endl;
-	} 
-	else if(rid == 0)
-	{
-		close(fd[0]); 
-        dup2(fd[1], STDOUT_FILENO); 
-        close(fd[1]);
-		if (execvp(cmd[0], cmd) < 0) 
-		{ 
-	           cout <<"Unable to execute command!!" << endl; 
-	    }
-	    exit(0);
+		cout << cmd[i] << " ";
+		i++;
 	}
-	else
-	{
-		int wfptr, lenIn, lenOut;
-		close(fd[1]);
-		wait(NULL);
-		if(flag[">"])
-			wfptr = open(file[0], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		else
-			wfptr = open(file[0], O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if(wfptr == -1)
-		{
-			cout << "Invalid file path : " << file[0] << endl;
-			return;
-		}
-		while((lenOut = read(fd[0], buff, 1024)) > 0)
-			lenIn = write(wfptr, buff, lenOut);
-
-		close(fd[0]);
-		return;
-	}
-}
-
-void parse_command(char **cmd, char *in)
-{
-	int i = 0;
-
-	if(strstr(in, "\""))
-	{
-		char *temp[128];
-		temp[i] = strtok(in, "\"");
-	    while( temp[i] != NULL ) 
-	    {
-	    	i++;
-			temp[i] = strtok(NULL, "\"");
-	    }
-
-	    i = 0;
-	    cmd[i] = strtok(temp[0], " ");
-	    while( cmd[i] != NULL ) 
-	    {
-	    	i++;
-			cmd[i] = strtok(NULL, " ");
-	    }
-
-	    cmd[i++] = temp[1];
-
-	    cmd[i] = strtok(temp[2], " ");
-	    while( cmd[i] != NULL ) 
-	    {
-	    	i++;
-			cmd[i] = strtok(NULL, " ");
-	    }
-	}
-	else
-	{
-		cmd[i] = strtok(in, " ");
-	    while( cmd[i] != NULL ) 
-	    {
-	    	i++;
-			cmd[i] = strtok(NULL, " ");
-	    }
-	}  
+	cout << endl;
 }
 
 void execute(char **arg)
@@ -213,18 +133,171 @@ void execute(char **arg)
 	}
 }
 
+void redirection(char **cmd, char **file)
+{
+	int fd[2];
+	char buff[1024];
+
+	if (pipe(fd)==-1) 
+    { 
+        cout << "Pipe failed" << endl; 
+        return; 
+    } 
+
+	pid_t rid = fork();
+	
+	if(rid == -1)
+	{
+		cout << "Process creation failed!!" << endl;
+	} 
+	else if(rid == 0)
+	{
+		close(fd[0]); 
+        dup2(fd[1], STDOUT_FILENO); 
+        close(fd[1]);
+		execute(cmd);
+	    exit(0);
+	}
+	else
+	{
+		int wfptr, lenOut;
+		close(fd[1]);
+		wait(NULL);
+		if(flag[">"])
+			wfptr = open(file[0], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		else
+			wfptr = open(file[0], O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if(wfptr == -1)
+		{
+			cout << "Invalid file path : " << file[0] << endl;
+			return;
+		}
+		while((lenOut = read(fd[0], buff, 1023)) > 0)
+		{
+			buff[lenOut] = '\0';
+			write(wfptr, buff, lenOut);
+		}	
+
+		close(fd[0]);
+		return;
+	}
+}
+
+void parse_command(char **cmd, char *in)
+{
+	int i = 0;
+
+	if(strstr(in, "\""))
+	{
+		char *temp[128];
+		temp[i] = strtok(in, "\"");
+	    while( temp[i] != NULL ) 
+	    {
+	    	i++;
+			temp[i] = strtok(NULL, "\"");
+	    }
+
+	    i = 0;
+	    cmd[i] = strtok(temp[0], " ");
+	    while( cmd[i] != NULL ) 
+	    {
+	    	i++;
+			cmd[i] = strtok(NULL, " ");
+	    }
+
+	    cmd[i++] = temp[1];
+
+	    cmd[i] = strtok(temp[2], " ");
+	    while( cmd[i] != NULL ) 
+	    {
+	    	i++;
+			cmd[i] = strtok(NULL, " ");
+	    }
+	}
+	else
+	{
+		cmd[i] = strtok(in, " ");
+	    while( cmd[i] != NULL ) 
+	    {
+	    	i++;
+			cmd[i] = strtok(NULL, " ");
+	    }
+	}  
+}
+
 void pipe(char **arg)
 {
 	int cnt = 0;
 	char *cmd[128];
 	int i = 0;
-
 	cnt = cnt_arg(arg);
 
 	if(flag[">"] || flag[">>"])
 		cnt--;
 
-	cout << cnt << endl;
+	int fd[2];
+	int pre_read = 0;
+	char buff[1024];
+
+ 	for (int i = 0; i < cnt; ++i)
+    {
+    	pipe(fd);
+    	int rid = fork();    	
+    	if(rid == -1)
+		{
+			cout << "Process creation failed!!" << endl;
+		} 
+		else if(rid == 0)
+		{
+			dup2(pre_read, 0);
+
+			if(flag[">"] || flag[">>"])
+				dup2(fd[1], 1);
+			else 
+			{
+				if(i < cnt-1)
+					dup2(fd[1], 1);
+			}
+
+			
+			close(fd[0]);
+			close(fd[1]);
+			parse_command(cmd, arg[i]);	
+			execute(cmd);
+			exit(0);
+		}
+		else
+		{ 	
+			wait(NULL);
+			close(fd[1]);
+			pre_read = fd[0];
+		}
+    }
+
+    if(flag[">"] || flag[">>"])
+    {
+    	int wfptr, lenOut;
+    	char *file[128];
+    	parse_command(file, arg[cnt]);
+    	cout << file[0];
+		if(flag[">"])
+			wfptr = open(file[0], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		else
+			wfptr = open(file[0], O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if(wfptr == -1)
+		{
+			cout << "Invalid file path : " << file[0] << endl;
+			return;
+		}
+		while((lenOut = read(fd[0], buff, 1023)) > 0)
+		{
+			buff[lenOut] = '\0';
+			write(wfptr, buff, lenOut);
+		}	
+
+		close(fd[0]);
+		return;
+    }
 }
 
 void execute_cmd(char **arg)
