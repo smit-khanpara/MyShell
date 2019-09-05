@@ -9,6 +9,7 @@
 using namespace std;
 
 unordered_map<string, int> flag;
+unordered_map<string, string> alias;
 int fdh;
 
 void init()
@@ -63,8 +64,68 @@ void print_cmd(char **cmd)
 	cout << endl;
 }
 
+void parse_command(char **cmd, char *in)
+{
+	int i = 0;
+
+	if(strstr(in, "alias"))
+	{
+		cmd[i] = in;
+		return;
+	}
+
+	if(strstr(in, "\"") || strstr(in, "\'"))
+	{
+		char *temp[128];
+		temp[i] = strtok(in, "\"\'");
+	    while( temp[i] != NULL ) 
+	    {
+	    	i++;
+			temp[i] = strtok(NULL, "\"\'");
+	    }
+
+	    i = 0;
+	    cmd[i] = strtok(temp[0], " ");
+	    while( cmd[i] != NULL ) 
+	    {
+	    	i++;
+			cmd[i] = strtok(NULL, " ");
+	    }
+
+	    cmd[i++] = temp[1];
+
+	    cmd[i] = strtok(temp[2], " ");
+	    while( cmd[i] != NULL ) 
+	    {
+	    	i++;
+			cmd[i] = strtok(NULL, " ");
+	    }
+	}
+	else
+	{
+		cmd[i] = strtok(in, " ");
+	    while( cmd[i] != NULL ) 
+	    {
+	    	i++;
+			cmd[i] = strtok(NULL, " ");
+	    }
+	}  
+}
+
 void execute(char **arg)
 {
+	string str;
+	str = arg[0];
+	if(alias.find(str) != alias.end())
+	{
+		char *cmd[128];
+		str = alias[str];
+		arg[0] = (char *) str.c_str();
+		parse_command(cmd, arg[0]);
+		execute(cmd);
+		return;
+	}
+
 	if(!strcmp(arg[0],"exit"))
 	{
 		cout << "exit" << endl;
@@ -107,9 +168,56 @@ void execute(char **arg)
 		return;
 	}
 
-	if(!strcmp(arg[0],"alias"))
+	if(strstr(arg[0], "alias"))
 	{
-
+		if(strstr(arg[0], "="))
+		{
+			string key, value;
+			char *temp1, *temp2;
+ 			strtok(arg[0]," ");
+ 			temp1 = strtok(NULL,"=\'");
+ 			temp2 = strtok(NULL,"\'");
+ 			if(temp1 && temp2 && strcmp(temp2,"="))
+			{
+				key = temp1;
+				value = temp2;
+				alias[key] = value;
+			}	
+			else
+				cout << "usage:  alias variable='comand'" << endl << "\talias variable" << endl << "\talias -p"<<endl;
+		}
+		else
+		{
+			string key;
+			char *temp;
+			strtok(arg[0]," ");
+			temp = strtok(NULL," ");
+			if(!temp)
+			{
+				cout << "usage:  alias variable='comand'" << endl << "\talias variable" << endl << "\talias -p"<<endl;
+				return;
+			}
+			key = temp;
+			if(key == "-p")
+			{
+				for (auto i : alias)
+				{
+					cout << "alias " << i.first << "='" << i.second << "'" <<endl;
+				}
+			}
+			else
+			{
+				if(alias.find(key) != alias.end())
+				{
+					cout << "alias " << key << "='" << alias[key] << "'" <<endl;
+				}
+				else
+				{
+					cout << "alias: " << key << ": not found" << endl;
+				}
+			}
+		}
+		return;
 	}
 
 	pid_t rid = fork();
@@ -181,48 +289,6 @@ void redirection(char **cmd, char **file)
 		close(fd[0]);
 		return;
 	}
-}
-
-void parse_command(char **cmd, char *in)
-{
-	int i = 0;
-
-	if(strstr(in, "\""))
-	{
-		char *temp[128];
-		temp[i] = strtok(in, "\"");
-	    while( temp[i] != NULL ) 
-	    {
-	    	i++;
-			temp[i] = strtok(NULL, "\"");
-	    }
-
-	    i = 0;
-	    cmd[i] = strtok(temp[0], " ");
-	    while( cmd[i] != NULL ) 
-	    {
-	    	i++;
-			cmd[i] = strtok(NULL, " ");
-	    }
-
-	    cmd[i++] = temp[1];
-
-	    cmd[i] = strtok(temp[2], " ");
-	    while( cmd[i] != NULL ) 
-	    {
-	    	i++;
-			cmd[i] = strtok(NULL, " ");
-	    }
-	}
-	else
-	{
-		cmd[i] = strtok(in, " ");
-	    while( cmd[i] != NULL ) 
-	    {
-	    	i++;
-			cmd[i] = strtok(NULL, " ");
-	    }
-	}  
 }
 
 void pipe(char **arg)
