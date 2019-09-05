@@ -122,6 +122,15 @@ void execute(char **arg)
 		str = alias[str];
 		arg[0] = (char *) str.c_str();
 		parse_command(cmd, arg[0]);
+		int cnt = cnt_arg(cmd);
+		int j = 1;
+		while(arg[j])
+		{
+			cmd[cnt] = arg[j];
+			cnt++;
+			j++;
+		}
+		cmd[cnt] = NULL;
 		execute(cmd);
 		return;
 	}
