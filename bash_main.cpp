@@ -13,87 +13,9 @@ extern char **environ;
 unordered_map<string, int> flag;
 unordered_map<string, string> alias;
 unordered_map<string, string> variable;
-unordered_map<string, string> e;
+unordered_map<string, string> op;
 char *env[128];
 int fdh;
-
-void init()
-{
-	cout << endl;
-	cout << "*****************************************************************************" << endl;
-	cout <<	"*                                                                           *"	<< endl;
-	cout <<	"*                          Welcome To My Unix Shell                         *"	<< endl;
-	cout <<	"*                                                                           *"	<< endl;
-	cout << "*****************************************************************************" << endl;
-	cout << endl;
-
-	fdh = open("history.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
-	struct passwd *p;
-	int u;
-	u = geteuid ();
-  	p = getpwuid (u);
-	
-	char *host = (char *) malloc(128 * sizeof(char));
-	char *h = (char *) malloc(128 * sizeof(char));
-	gethostname(host, 128);
-	strcpy(h, "HOSTNAME=");
-	strcat(h, host);
-
-	char *temp2 = (char *) malloc(128 * sizeof(char));
-	strcpy(temp2,"HOME=");
-	strcat(temp2,p->pw_dir);
-	
-	char *temp3 = (char *) malloc(128 * sizeof(char)); 
-	strcpy(temp3,"USER=");
-	strcat(temp3, p->pw_name);
-	
-	char *temp = (char *) malloc(1024 * sizeof(char));
-	strcpy(temp,"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games");
-	
-	char *temp1 = (char *) malloc(2048 * sizeof(char));
-	char cwd[4096];
-	getcwd(cwd, 4096);
-	strcpy(temp1,"PS1=");
-	strcat(temp1, p->pw_name);
-	strcat(temp1, "@");
-	strcat(temp1, host);
-	strcat(temp1, ":");
-	strcat(temp1, cwd);
-	strcat(temp1,"$");
-
-	char *temp4 = (char *) malloc(20 * sizeof(char));
-	strcpy(temp4, "TERM=xterm-256color");
-	
-	env[0] = temp2;
-	env[1] = temp;
-	env[2] =  h;
-	env[3] = temp3;
-	env[4] = temp1;
-	env[5] = temp4;
-	environ = env;
-}
-
-void prompt()
-{
-	char *user = getenv("USER");
-	char *host = getenv("HOSTNAME");
-	char *ps1 = getenv("PS1");
-	cout << "\033[1;34m" << ps1 << "\033[0m";
-
-	if(getuid() == 0)
-	{
-		cout << "# ";
-	}
-	else
-	{
-		cout << "$ ";
-	}
-	flag["|"] = 0;
-	flag[">>"] = 0;
-	flag[">"] = 0;
-	flag["s"] = 0;
-	flag["="] = 0;
-}
 
 int cnt_arg(char **arg)
 {
@@ -132,25 +54,15 @@ void resolve_var(char **cmd)
 				string str;
 				str = cmd[k];
 				if(str == "$HOME")
-				{
-					cmd[k] = environ[0];
-				}
+					cmd[k] = getenv("HOME");
 				else if(str == "$PATH")
-				{
-					cmd[k] = environ[1];
-				}
+					cmd[k] = getenv("PATH");
 				else if(str == "$PS1")
-				{
-					cmd[k] = environ[4];
-				}
-				else if(str == "HOSTNAME")
-				{
-					cmd[k] = environ[2];
-				}
+					cmd[k] = getenv("PS1");
+				else if(str == "$HOSTNAME")
+					cmd[k] = getenv("HOSTNAME");
 				else if(str == "$USER")
-				{
-					cmd[k] = environ[3];
-				}
+					cmd[k] = getenv("USER");
 				else
 					cmd[k] = (char *)variable[str].c_str();
 			}
@@ -162,6 +74,12 @@ void resolve_var(char **cmd)
 void parse_command(char **cmd, char *in)
 {
 	int i = 0;
+
+	// if(strstr(arg[0],"MEDIA"))
+	// {
+	// 	[‘vlc’, ‘vlc path’,’.mp4’]
+		 
+	// }
 
 	if(strstr(in, "="))
 	{
@@ -281,7 +199,7 @@ void execute(char **arg)
 
 	if(!strcmp(arg[0],"cd"))
 	{
-		if(arg[2])
+		if(cnt_arg(arg) > 2)
 		{
 			cout << "cd : too many arguments" << endl;
 			return;
@@ -295,7 +213,7 @@ void execute(char **arg)
 
 	if(!strcmp(arg[0],"history"))
 	{
-		if(arg[1])
+		if(cnt_arg(arg) > 1)
 		{
 			cout << "try: history without any argument" << endl;
 			return;
@@ -374,6 +292,12 @@ void execute(char **arg)
 		return;
 	}
 
+	// if(!strcmp(arg[0],"MEDIA"))
+	// {
+
+	// 	return;
+	// }
+
 	if(flag["="])
 	{
 		if(cnt_arg(arg) == 2)
@@ -382,7 +306,18 @@ void execute(char **arg)
 			var = arg[0];
 			var = "$"+var;
 			val = arg[1];
-			variable[var] = val;
+			if(var == "$HOME")
+				setenv("HOME",arg[1],1);
+			else if(var == "$PATH")
+				setenv("PATH",arg[1],1);
+			else if(var == "$PS1")
+				setenv("PS1",arg[1],1);
+			else if(var == "$HOSTNAME")
+				setenv("HOSTNAME",arg[1],1);
+			else if(var == "$USER")
+				setenv("USER",arg[1],1);
+			else	
+				variable[var] = val;
 		}
 		else
 		{
@@ -473,8 +408,10 @@ void pipe(char **arg)
 		cnt--;
 
 	int fd[2];
-	int pre_read = 0;
+	vector<int> pre_read;
+	pre_read.push_back(0);
 	char buff[1024];
+
 
  	for (int i = 0; i < cnt; ++i)
     {
@@ -486,7 +423,7 @@ void pipe(char **arg)
 		} 
 		else if(rid == 0)
 		{
-			dup2(pre_read, 0);
+			dup2(pre_read[i], 0);
 
 			if(flag[">"] || flag[">>"])
 				dup2(fd[1], 1);
@@ -507,7 +444,7 @@ void pipe(char **arg)
 		{ 	
 			wait(NULL);
 			close(fd[1]);
-			pre_read = fd[0];
+			pre_read.push_back(fd[0]);
 		}
     }
 
@@ -609,6 +546,95 @@ void parse_and_excute()
     }
 
     execute_cmd(arg);
+}
+
+void init()
+{
+	cout << endl;
+	cout << "*****************************************************************************" << endl;
+	cout <<	"*                                                                           *"	<< endl;
+	cout <<	"*                          Welcome To My Unix Shell                         *"	<< endl;
+	cout <<	"*                                                                           *"	<< endl;
+	cout << "*****************************************************************************" << endl;
+	cout << endl;
+
+	fdh = open("history.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
+	struct passwd *p;
+	int u;
+	u = geteuid();
+  	p = getpwuid(u);
+	
+	char *host = (char *) malloc(128 * sizeof(char));
+	char *h = (char *) malloc(128 * sizeof(char));
+	gethostname(host, 128);
+	strcpy(h, "HOSTNAME=");
+	strcat(h, host);
+
+	char *temp2 = (char *) malloc(128 * sizeof(char));
+	strcpy(temp2,"HOME=");
+	strcat(temp2,p->pw_dir);
+	
+	char *temp3 = (char *) malloc(128 * sizeof(char)); 
+	strcpy(temp3,"USER=");
+	strcat(temp3, p->pw_name);
+	
+	char *temp = (char *) malloc(1024 * sizeof(char));
+	strcpy(temp,"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games");
+	
+	char *temp1 = (char *) malloc(2048 * sizeof(char));
+	char cwd[4096];
+	getcwd(cwd, 4096);
+	strcpy(temp1,"PS1=");
+	strcat(temp1, p->pw_name);
+	strcat(temp1, "@");
+	strcat(temp1, host);
+	strcat(temp1, ":");
+	strcat(temp1, cwd);
+	strcat(temp1,"\0");
+
+	char *temp4 = (char *) malloc(20 * sizeof(char));
+	strcpy(temp4, "TERM=xterm-256color");
+	
+	env[0] = temp2;
+	env[1] = temp;
+	env[2] =  h;
+	env[3] = temp3;
+	env[4] = temp1;
+	env[5] = temp4;
+	environ = env;
+
+	int rc;
+	char buf[1024];
+	char *line;
+	rc = open(".myrc",O_RDONLY);
+
+	while(fgets (str, 1024, rc))
+	{
+		if(buf[0] == '\n')
+    		continue;
+    	line = strtok(buf, "\n");
+    	char *cmd[128];
+    	parse_command(cmd, line);
+    	execute(cmd);
+	}
+	close(rc);
+}
+
+void prompt()
+{
+	char *ps1 = getenv("PS1");
+	cout << "\033[1;34m" << ps1 << "\033[0m";
+
+	if(getuid() == 0)
+		cout << "#";
+	else
+		cout << "$ ";
+
+	flag["|"] = 0;
+	flag[">>"] = 0;
+	flag[">"] = 0;
+	flag["s"] = 0;
+	flag["="] = 0;
 }
 
 void signal_handler( int signal_num ) 
