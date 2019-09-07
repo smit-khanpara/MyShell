@@ -83,3 +83,9 @@ ls
 hello > a.txt
 ls 
 cat a.txt
+
+echo hello
+echo hello
+ls
+
+

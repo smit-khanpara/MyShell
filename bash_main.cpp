@@ -1,15 +1,20 @@
 #include<iostream>
 #include<unistd.h>
 #include<sys/wait.h>
-#include <sstream>
+#include <signal.h>
 #include<string.h>
+#include<string>
 #include <fcntl.h>
 #include<vector>
 #include<unordered_map>
+#include <pwd.h>
 using namespace std;
-
+extern char **environ;
 unordered_map<string, int> flag;
 unordered_map<string, string> alias;
+unordered_map<string, string> variable;
+unordered_map<string, string> e;
+char *env[128];
 int fdh;
 
 void init()
@@ -23,21 +28,71 @@ void init()
 	cout << endl;
 
 	fdh = open("history.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
+	struct passwd *p;
+	int u;
+	u = geteuid ();
+  	p = getpwuid (u);
+	
+	char *host = (char *) malloc(128 * sizeof(char));
+	char *h = (char *) malloc(128 * sizeof(char));
+	gethostname(host, 128);
+	strcpy(h, "HOSTNAME=");
+	strcat(h, host);
+
+	char *temp2 = (char *) malloc(128 * sizeof(char));
+	strcpy(temp2,"HOME=");
+	strcat(temp2,p->pw_dir);
+	
+	char *temp3 = (char *) malloc(128 * sizeof(char)); 
+	strcpy(temp3,"USER=");
+	strcat(temp3, p->pw_name);
+	
+	char *temp = (char *) malloc(1024 * sizeof(char));
+	strcpy(temp,"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games");
+	
+	char *temp1 = (char *) malloc(2048 * sizeof(char));
+	char cwd[4096];
+	getcwd(cwd, 4096);
+	strcpy(temp1,"PS1=");
+	strcat(temp1, p->pw_name);
+	strcat(temp1, "@");
+	strcat(temp1, host);
+	strcat(temp1, ":");
+	strcat(temp1, cwd);
+	strcat(temp1,"$");
+
+	char *temp4 = (char *) malloc(20 * sizeof(char));
+	strcpy(temp4, "TERM=xterm-256color");
+	
+	env[0] = temp2;
+	env[1] = temp;
+	env[2] =  h;
+	env[3] = temp3;
+	env[4] = temp1;
+	env[5] = temp4;
+	environ = env;
 }
 
 void prompt()
 {
 	char *user = getenv("USER");
-	char host[128];
-	gethostname(host, 128);
-	char cwd[4096];
-	getcwd(cwd, 4096);
+	char *host = getenv("HOSTNAME");
+	char *ps1 = getenv("PS1");
+	cout << "\033[1;34m" << ps1 << "\033[0m";
 
-	cout << "\033[1;36m" << user << "@" << host << "\033[0m" << ":" << "\033[1;34m" << cwd  << "\033[0m" << "$ ";
-
+	if(getuid() == 0)
+	{
+		cout << "# ";
+	}
+	else
+	{
+		cout << "$ ";
+	}
 	flag["|"] = 0;
 	flag[">>"] = 0;
 	flag[">"] = 0;
+	flag["s"] = 0;
+	flag["="] = 0;
 }
 
 int cnt_arg(char **arg)
@@ -56,21 +111,91 @@ int cnt_arg(char **arg)
 void print_cmd(char **cmd)
 {
 	int i=0;
+	cout << "print cmd:" << endl;
 	while(cmd[i])
 	{
 		cout << cmd[i] << " ";
 		i++;
 	}
-	cout << endl;
+	cout << endl ;
+}
+
+void resolve_var(char **cmd)
+{
+	int k = 0;
+	while(cmd[k])
+	{
+		if(strstr(cmd[k], "$"))
+		{
+			if(!strstr(cmd[k]," "))
+			{
+				string str;
+				str = cmd[k];
+				if(str == "$HOME")
+				{
+					cmd[k] = environ[0];
+				}
+				else if(str == "$PATH")
+				{
+					cmd[k] = environ[1];
+				}
+				else if(str == "$PS1")
+				{
+					cmd[k] = environ[4];
+				}
+				else if(str == "HOSTNAME")
+				{
+					cmd[k] = environ[2];
+				}
+				else if(str == "$USER")
+				{
+					cmd[k] = environ[3];
+				}
+				else
+					cmd[k] = (char *)variable[str].c_str();
+			}
+		}
+		k++;
+	}
 }
 
 void parse_command(char **cmd, char *in)
 {
 	int i = 0;
 
-	if(strstr(in, "alias"))
+	if(strstr(in, "="))
 	{
-		cmd[i] = in;
+		flag["="] = 1;
+		char *temp[128];
+		temp[0] = strtok(in, "=");
+		temp[1] = strtok(NULL, "=");
+		i = 0;
+		cmd[i] = strtok(temp[0], " ");
+		while( cmd[i] != NULL ) 
+		{
+		  	i++;
+			cmd[i] = strtok(NULL, " ");
+		}
+	    if(strstr(temp[1], "\"") || strstr(temp[1], "\'"))
+		{
+			cmd[i++] = strtok(temp[1], "\'\"");
+			cmd[i] = strtok(NULL, "\'\"");
+		    while( cmd[i] != NULL ) 
+		    {
+		    	i++;
+				cmd[i] = strtok(NULL, " ");
+		    }
+		}
+		else
+		{
+			cmd[i] = strtok(temp[1], " ");
+		    while( cmd[i] != NULL ) 
+		    {
+		    	i++;
+				cmd[i] = strtok(NULL, " ");
+		    }
+		}
+		resolve_var(cmd);
 		return;
 	}
 
@@ -109,7 +234,8 @@ void parse_command(char **cmd, char *in)
 	    	i++;
 			cmd[i] = strtok(NULL, " ");
 	    }
-	}  
+	} 
+	resolve_var(cmd);
 }
 
 void execute(char **arg)
@@ -118,8 +244,20 @@ void execute(char **arg)
 	str = arg[0];
 	if(alias.find(str) != alias.end())
 	{
+		string val;
 		char *cmd[128];
-		str = alias[str];
+		val = alias[str];
+		while(alias.find(val) != alias.end())
+		{
+			val = alias[val];
+			if(val == str)
+			{
+				cout <<"Unable to execute command!!" << endl;
+				return;
+			}
+		}
+		str = val;
+
 		arg[0] = (char *) str.c_str();
 		parse_command(cmd, arg[0]);
 		int cnt = cnt_arg(cmd);
@@ -177,54 +315,78 @@ void execute(char **arg)
 		return;
 	}
 
-	if(strstr(arg[0], "alias"))
+	if(!strcmp(arg[0],"alias"))
 	{
-		if(strstr(arg[0], "="))
+		int cnt = cnt_arg(arg);
+		if(flag["="])
 		{
-			string key, value;
-			char *temp1, *temp2;
- 			strtok(arg[0]," ");
- 			temp1 = strtok(NULL,"=\'");
- 			temp2 = strtok(NULL,"\'");
- 			if(temp1 && temp2 && strcmp(temp2,"="))
+			if(cnt == 3)
 			{
-				key = temp1;
-				value = temp2;
+				string key, value;
+				key = arg[1];
+ 				value = arg[2];
 				alias[key] = value;
 			}	
 			else
-				cout << "usage:  alias variable='comand'" << endl << "\talias variable" << endl << "\talias -p"<<endl;
+				cout << "usage:  alias variable='comand' : to assign alias" 
+			         << endl << "\talias variable : to check alias value" 
+			         << endl << "\talias -p : to print all value"<<endl;
 		}
 		else
 		{
-			string key;
-			char *temp;
-			strtok(arg[0]," ");
-			temp = strtok(NULL," ");
-			if(!temp)
-			{
-				cout << "usage:  alias variable='comand'" << endl << "\talias variable" << endl << "\talias -p"<<endl;
-				return;
-			}
-			key = temp;
-			if(key == "-p")
+			if(cnt == 1)
 			{
 				for (auto i : alias)
 				{
 					cout << "alias " << i.first << "='" << i.second << "'" <<endl;
 				}
 			}
-			else
+			else if(cnt == 2)
 			{
-				if(alias.find(key) != alias.end())
+				string key;
+				key = arg[1];
+				if(key == "-p")
 				{
-					cout << "alias " << key << "='" << alias[key] << "'" <<endl;
+					for (auto i : alias)
+					{
+						cout << "alias " << i.first << "='" << i.second << "'" <<endl;
+					}
 				}
 				else
 				{
-					cout << "alias: " << key << ": not found" << endl;
+					if(alias.find(key) != alias.end())
+					{
+						cout << "alias " << key << "='" << alias[key] << "'" <<endl;
+					}
+					else
+						cout << "usage:  alias variable='comand' : to assign alias" 
+					         << endl << "\talias variable : to check alias value" 
+					         << endl << "\talias -p : to print all value"<<endl;
 				}
+
 			}
+			else
+			{
+				cout << "usage:  alias variable='comand'" << endl << "\talias variable" << endl << "\talias -p"<<endl;
+				return;
+			}
+		}
+		return;
+	}
+
+	if(flag["="])
+	{
+		if(cnt_arg(arg) == 2)
+		{
+			string var,val;
+			var = arg[0];
+			var = "$"+var;
+			val = arg[1];
+			variable[var] = val;
+		}
+		else
+		{
+			cout <<"Unable to execute command!!" << endl;
 		}
 		return;
 	}
@@ -239,7 +401,7 @@ void execute(char **arg)
 	{
 		if (execvp(arg[0], arg) < 0) 
 		{ 
-	           cout <<"Unable to execute command!!" << endl; 
+           cout <<"Unable to execute command!!" << endl; 
 	    }
 	    exit(0);
 	}
@@ -291,7 +453,7 @@ void redirection(char **cmd, char **file)
 		}
 		while((lenOut = read(fd[0], buff, 1023)) > 0)
 		{
-			buff[lenOut] = '\0';
+			buff[++lenOut] = '\0';
 			write(wfptr, buff, lenOut);
 		}	
 
@@ -406,6 +568,12 @@ void parse_and_excute()
     int i = 0;
     fgets(buf, 1024, stdin);
 
+    if(buf[0] == '\n')
+    	return;
+
+    if(flag["s"])
+    	return;
+
     write(fdh, buf, strlen(buf));
     input = strtok(buf, "\n");
 
@@ -443,8 +611,17 @@ void parse_and_excute()
     execute_cmd(arg);
 }
 
+void signal_handler( int signal_num ) 
+{ 
+   signal(signal_num, signal_handler);
+   cout << endl << "The interrupt signal is (" << signal_num << ")." << endl;
+   flag["s"] = 1;
+   return;
+}
+
 int main()
 {
+	signal(SIGINT, signal_handler);
 	init();
 	while(1)
 	{
