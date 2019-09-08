@@ -16,6 +16,7 @@ unordered_map<string, string> variable;
 unordered_map<string, string> op;
 char *env[128];
 int fdh;
+int err = 0;
 
 int cnt_arg(char **arg)
 {
@@ -47,7 +48,24 @@ void resolve_var(char **cmd)
 	int k = 0;
 	while(cmd[k])
 	{
-		if(strstr(cmd[k], "$"))
+		if(!strcmp(cmd[k],"$$"))
+		{
+			pid_t pd = getpid();
+			char * pid = (char *)malloc(8 * sizeof(char));
+			sprintf(pid, "%d", pd);
+			cmd[k] = pid;
+		}
+		else if(!strcmp(cmd[k],"$?"))
+		{
+			char *e = (char *)malloc(8 * sizeof(char));
+			sprintf(e, "%d", err);
+			cmd[k] = e;
+		}
+		else if(!strcmp(cmd[k],"~"))
+		{
+			cmd[k] = getenv("HOME");
+		}
+		else if(strstr(cmd[k], "$"))
 		{
 			if(!strstr(cmd[k]," "))
 			{
@@ -177,7 +195,8 @@ void execute(char **arg)
 			val = alias[val];
 			if(val == str)
 			{
-				cout <<"Unable to execute command!!" << endl;
+				cout <<"Command not found!!" << endl;
+				err = 127;
 				return;
 			}
 		}
@@ -210,12 +229,15 @@ void execute(char **arg)
 		if(cnt_arg(arg) > 2)
 		{
 			cout << "cd : too many arguments" << endl;
+			err = 1;
 			return;
 		}
 		if(chdir(arg[1]) != 0)
 		{
 			cout << "cd: Assign: No such file or directory " << endl;
+			err = 1;
 		}
+		err = 0;
 		return;
 	}
 
@@ -224,6 +246,7 @@ void execute(char **arg)
 		if(cnt_arg(arg) > 1)
 		{
 			cout << "try: history without any argument" << endl;
+			err = 127;
 			return;
 		}
 
@@ -236,7 +259,7 @@ void execute(char **arg)
 			buffer[ln] = '\0';
 			cout << buffer;
 		}	
-
+		err = 0;
 		close(rdh);
 		return;
 	}
@@ -252,11 +275,15 @@ void execute(char **arg)
 				key = arg[1];
  				value = arg[2];
 				alias[key] = value;
+				err = 0;
 			}	
 			else
+			{
 				cout << "usage:  alias variable='comand' : to assign alias" 
 			         << endl << "\talias variable : to check alias value" 
 			         << endl << "\talias -p : to print all value"<<endl;
+			    err = 127;
+			}	
 		}
 		else
 		{
@@ -266,6 +293,7 @@ void execute(char **arg)
 				{
 					cout << "alias " << i.first << "='" << i.second << "'" <<endl;
 				}
+				err = 0;
 			}
 			else if(cnt == 2)
 			{
@@ -276,25 +304,33 @@ void execute(char **arg)
 					for (auto i : alias)
 					{
 						cout << "alias " << i.first << "='" << i.second << "'" <<endl;
+
 					}
+					err = 0;
 				}
 				else
 				{
 					if(alias.find(key) != alias.end())
 					{
 						cout << "alias " << key << "='" << alias[key] << "'" <<endl;
+						err = 0;
 					}
 					else
+					{
 						cout << "usage:  alias variable='comand' : to assign alias" 
 					         << endl << "\talias variable : to check alias value" 
 					         << endl << "\talias -p : to print all value"<<endl;
+					    err = 127;
+					}	
 				}
 
 			}
 			else
 			{
-				cout << "usage:  alias variable='comand'" << endl << "\talias variable" << endl << "\talias -p"<<endl;
-				return;
+				cout << "usage:  alias variable='comand' : to assign alias" 
+				<< endl << "\talias variable : to check alias value" 
+				<< endl << "\talias -p : to print all value"<<endl;
+				err = 127;
 			}
 		}
 		return;
@@ -309,6 +345,7 @@ void execute(char **arg)
 		ext = strtok(NULL, ".");
 		ext = "."+ext;
 		arg[0] = (char *) op[ext].c_str();
+		err = 0;
 	}
 
 	if(!strcmp(arg[0],"MEDIA"))
@@ -326,6 +363,7 @@ void execute(char **arg)
 			strcat(temp,arg[2]);
 			setenv("PATH",temp,1);
 		}
+		err = 0;
 		return;
 	}
 
@@ -349,10 +387,12 @@ void execute(char **arg)
 				setenv("USER",arg[1],1);
 			else	
 				variable[var] = val;
+			err = 0;
 		}
 		else
 		{
-			cout <<"Unable to execute command!!" << endl;
+			cout <<"Command not found!!" << endl;
+			err = 127;
 		}
 		return;
 	}
@@ -367,13 +407,15 @@ void execute(char **arg)
 	{
 		if (execvp(arg[0], arg) < 0) 
 		{ 
-           cout <<"Unable to execute command!!" << endl; 
+           cout <<"command not found!!" << endl;
+           exit(127);
 	    }
-	    exit(0);
+	    return;
 	}
 	else
 	{
-		wait(NULL);
+		wait(&err);
+		err = WEXITSTATUS(err);
 		return;
 	}
 }
@@ -401,28 +443,39 @@ void redirection(char **cmd, char **file)
         dup2(fd[1], STDOUT_FILENO); 
         close(fd[1]);
 		execute(cmd);
-	    exit(0);
+	    exit(err);
 	}
 	else
 	{
-		int wfptr, lenOut;
+		int wfptr, lenOut, e;
 		close(fd[1]);
-		wait(NULL);
+		wait(&e);
+		e = WEXITSTATUS(e);
+		if(e == 127)
+		{
+			cout << "Command not found!!" << endl;
+			err = 127;
+			close(fd[0]);
+			return;
+		}
+
 		if(flag[">"])
 			wfptr = open(file[0], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		else
 			wfptr = open(file[0], O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if(wfptr == -1)
 		{
-			cout << "Invalid file path : " << file[0] << endl;
+			cout << file[0] << ": No such file or directory" << endl;
+			err = 1;
 			return;
 		}
+		
 		while((lenOut = read(fd[0], buff, 1023)) > 0)
 		{
 			buff[++lenOut] = '\0';
-			write(wfptr, buff, lenOut);
+			write(wfptr, buff, lenOut-1);
 		}	
-
+		err = 0;
 		close(fd[0]);
 		return;
 	}
