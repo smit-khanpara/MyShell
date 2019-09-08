@@ -1,91 +1,404 @@
-ls -l
-cat history.txt
-bye
-kdf
-history
-cat history
-cat history.txt
-history
-history
-history 1
-clear
-s
-cp history.txt /home/smit/Study/OS/MyShell/
-ls /home/smit/Study/OS/MyShell/
-rm /home/smit/Study/OS/Myshell/a.out
-rm /home/smit/Study/OS/MyShell/a.out
-ls /home/smit/Study/OS/MyShell/
-clear
-git status
-cd ..
-cd ..
-cd MyShell
-git status
-git add .
-git status
-git commit -m "history_cd_redirection"
-git push origin master
-git status
-clear
-ls -l | ls -l
-ls -l s d nf fnf mfmf mf mfm fm mf | echo "hwlo     " sss sss ddd ff gg hh
-shhshsh shshhshs | adada adada addada aaa ddd | dd ff gg hh ii jj kk ll mm | qq ww ee rr tt yy uu ii oo pp | zz xx vv bb nn mm ,,
-ls -l | ls -l
-ls -l | ls -l
-ls -k df dfd | dsf | df |df ds |df ds >> ss
-ls -l d|dfd|dfd|df|fd
-jdf|dfd|dfd|dfd|fd|df >> qwe
-exit
-cd ss ss
-cd aa
-history a
-history
-clear
-history
-history
-clear
-history
-history
-clear
-history
-history
-clear
-history
-clear
-clearclearalias
-alias l='ls -l'
-echo
-cat
-rm
-rm --help
-alias --help
-exit
-b
-ls -l
-k
-ls -l | ls -l
-clear
-exit
-alias
-clear
-ls -l | w | w
-ls | s > 3
- > 3
-ls 
-cat 3
-hello > 3
-cat 3
-ls 
-cat 3
-cat '3'
-rm 3
-ls 
-hello > a.txt
-ls 
+ls | wc
+ls
 cat a.txt
-
+rm a.txt
+ls
+rm b.txt
+cat test
+rm test
+ls
+cat > a.txt
+cat a.txt
+cat a.txt | sort | uniq | wc
+exit
+cat a.txt | sort | uniq | wc
+cat a.txt catcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcat a.txt | sort | uniq | wc
+cat a.txt | sort | uniq | wc
+clear
+printenv
+echo $PATH
+echo PATH
+clear
+echo "$PATH  "
+echo "$HOME "
+echo "$PATH "
+echo $PATH
+echo $HOME
+echo $PS1
+echo $PATH
+a
+alias
+echo $PS1
+a
+exit
+echo $HOSTNAME
+echo $USER
+echo $PS1
+a.out
+./a.out
+echo $HOSTNAME
+echo $PS1
+echo $PS!
+echo $PS1
+exit
+PS1=1
+echo $PS1
+echo $HOME
+HOME=a
+echo $HOME
+exit
+$USER
+echo $USER
+printenv
+exit
+echo %USER
+echo $USER
+printenv
+echo $USER
+USER=3
+echo $USER
+exit
+printenv
+printenv
+printenv
+echo $PATH
+echo $PATH
+printenv
+echo $PATH
+echo $PATH
+printenv
+echo $PATH
+echo $PATH
+echo $PATH
+echo $PATH
+printenv
+echo $PS1
+PS1=a
+printenv
+exit
+MEDIA=[a,b,c]
+MEDIA=[a,b,c]
+MEDIA=[a,b,c]
+MEDIA=[a,b,c]
+MEDIA=[a,b,c]
+MEDIA=['a','b','c
+MEDIA=['a','b','c]
+MEDIA=['a','b','c]
+MEDIA=['a','b','c]
+MEDIA=['a','b','c]
+MEDIA=['a','b','c]
+MEDIA=['a','b','c]
+MEDIA=['a','b','c]
+MEDIA=['a','b','c]
+MEDIA=['a','b','c]
+MEDIA=['a','b','c]
+MEDIA=['a','b','c]
+MEDIA=['abc','dfg','.dfg']
+MEDIA=['vlc','/usr/bin','.mp4']
+open /home/smit/Downloads/endgame.mp4
+vlc /home/smit/Downloads/endgame.mp4
+$PATH
+echo $PATH
+printenv
+MEDIA=['vlc','/usr/bin','.mp4']
+echo $PATH
+MEDIA=['vlc','/usr/bin/','.mp4']
+echo $PATH
+MEDIA=['vlc','/usr/bin/hello','.mp4']
+echo $PATH
+echo $PATH
+MEDIA=['vlc','/usr/bin/','.mp4']
+echo $PATH
+MEDIA=['vlc','/usr/bin','.mp4']
+echo $PATH
+open /home/smit/Downloads/endgame.mp4
+open endgame.mp4
+open endgame.mp4
+open endgame.mp4
+MEDIA=['vlc','/usr/bin/','.mp4']
+open endgame.mp4
+open endgame.mp4
+open endgame.mp4
+open endgame.mp4
+open endgame.mp4
+open endgame.mp4
+MEDIA=['vlc','/usr/bin/','.mp4']
+open endgame.mp4
+MEDIA=['vlc','/usr/bin/','.mp4']
+open endgame.mp4
+sudo su
+cd ..
+cd ..
+cd .
+exit
+cd ..
+cd ..
+cd ..
+exit
+cd
+cd .
+cd ..
+cd /home/
+cd ..
+ls
+cd ..
+printenv
+cd ..
+cd .
+cd
+cd ..
+cd /home
+clear
+history
+history
+MEDIA=['vlc','/bin/,'.mp4']
+open endgame.mp4
+vlc endgame.mp4
+alias
+alias
+echo $x
+echo $y
+echo $z
+printenv
+alias
+echo $x
+echo $y
+open endgame.mp4
+clear
+pwd
+exit
+printenv
+printenv grep "HOME"
+ll
+la
+l
+echo $x $y
+echo $.mp3
+clear
+exit
+echo $$
+./aout
+./a.out
+echo $$
+./a.out
+echo $$
+exit
+echo $$
+exit
+echo $$
+exit
+ls | wc
+echo $?
+laa
+echo $?
+ls -hh
+cat op
+echo $?
+jk
+echo $?
+ls -e
+echo $?
+a > a.txt
+cat a.txt
+a = aa ds 
+echo $?
+e > a.txt
+echo > /ddd?
+sdff
+echo je > /as/a
+echo je > /as/s
+echo $?
+e > /as/a
+e > a
+cat a
+clear
+echo $?
+exit
+a > a
+echo $e?
+echo $?
+a > a
+a > a
+rm a
+a > a
+echo $?
+cat a
+exit
+echo ~
+x=~
+echo $x
+echo $y
+echo $z
+z=$y
+echo $z
+clear
+exit
+record start
 echo hello
+record stop
+exit
+exit
+cd ..
+cd ..
+cd ..
+exit
+record start
 echo hello
 ls
-
-
+alias ls=ls
+ls
+ls -al
+alias
+exit
+stop record
+record stop
+alias
+exit
+exit
+record start
+echo hello
+echo bye
+exit
+script start
+record start
+echo hello
+record start
+echo hello
+ls
+echo bye
+exit
+record start
+echo hello
+record start
+echo hello
+exit
+record start
+ls -al
+ls
+exit
+record statrt
+record start
+echo hello
+ls
+exit
+record script
+record start
+echo hello
+ls
+echo hello
+record start
+echo hello
+record start
+echo hello
+exit
+record start
+echo hello
+alias
+record start
+ls
+echo hello
+record start
+echo hello
+ls
+exit
+ls
+echo hello
+copy
+record start
+echo hello
+rrecord stop
+record stop
+echo hello
+record start
+ls
+echo hello hsjkd fkdfkhdkhfkdkhf dkhfhkd hkhf
+ls | wc
+ls -al
+ls > a.txt
+exit
+record stop
+exit
+exit
+record start
+cd ..
+exit
+record start
+exit
+record start
+echo hello
+alias
+ls
+ls -al
+record stop
+echo hello
+echo bye
+exit
+record start
+echo hello
+ls
+record stop
+exit
+record start
+ls
+record stop
+exit
+record start
+echo hello
+ls
+record stop
+echo bye
+exit
+record dd
+alias
+alias a=b
+alias b=ls
+a
+b
+exit
+record start
+record ss
+cd dd dd
+alias
+record stop
+record start
+record d
+cd aa a
+cd aa
+cd ..
+alias ass aa aa
+alias a a
+alias a
+alias
+alias a=ls
+a
+alias
+v=2 s
+v=3
+echo $v
+echo $v
+echo $x
+v=3
+echo $x
+echo $v
+exit
+v=5
+echo $v
+record start
+echo $v
+z=6
+echo $z
+ls
+ls
+echo hello
+record start
+v=5
+echo $v
+z=0
+echo $z
+exit
+record start
+v=5
+echo $v
+echo hello
+record stop
+exit

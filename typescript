@@ -1,0 +1,17 @@
+Script started on 2019-09-08 19:42:50+0530
+]0;smit@smit-Lenovo-B570: ~/Study/OS/MyShell[01;32msmit@smit-Lenovo-B570[00m:[01;34m~/Study/OS/MyShell[00m$ hello
+
+Command 'hello' not found, but can be installed with:
+
+sudo apt install hello            
+sudo apt install hello-traditional
+
+]0;smit@smit-Lenovo-B570: ~/Study/OS/MyShell[01;32msmit@smit-Lenovo-B570[00m:[01;34m~/Study/OS/MyShell[00m$ w[Kecho hello
+hello
+]0;smit@smit-Lenovo-B570: ~/Study/OS/MyShell[01;32msmit@smit-Lenovo-B570[00m:[01;34m~/Study/OS/MyShell[00m$ 
+]0;smit@smit-Lenovo-B570: ~/Study/OS/MyShell[01;32msmit@smit-Lenovo-B570[00m:[01;34m~/Study/OS/MyShell[00m$ eco[Kho bye
+bye
+]0;smit@smit-Lenovo-B570: ~/Study/OS/MyShell[01;32msmit@smit-Lenovo-B570[00m:[01;34m~/Study/OS/MyShell[00m$ exit
+exit
+
+Script done on 2019-09-08 19:43:07+0530
