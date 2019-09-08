@@ -75,11 +75,18 @@ void parse_command(char **cmd, char *in)
 {
 	int i = 0;
 
-	// if(strstr(arg[0],"MEDIA"))
-	// {
-	// 	[‘vlc’, ‘vlc path’,’.mp4’]
-		 
-	// }
+	if(strstr(in,"MEDIA"))
+	{
+		char *temp = strtok(in, "[");
+		char *temp1 = strtok(NULL,"]");
+		cmd[i++] = strtok(temp,"=");
+		cmd[i++] = strtok(temp1,"\'");
+		cmd[i++] = strtok(NULL,"\',\'");
+		cmd[i++] = strtok(NULL,"\',\'");
+		cmd[i++] = strtok(NULL,"\'");
+		cmd[i] = NULL;
+		return;
+	}
 
 	if(strstr(in, "="))
 	{
@@ -199,6 +206,7 @@ void execute(char **arg)
 
 	if(!strcmp(arg[0],"cd"))
 	{
+		print_cmd(arg);
 		if(cnt_arg(arg) > 2)
 		{
 			cout << "cd : too many arguments" << endl;
@@ -292,11 +300,34 @@ void execute(char **arg)
 		return;
 	}
 
-	// if(!strcmp(arg[0],"MEDIA"))
-	// {
+	if(!strcmp(arg[0],"open"))
+	{
+		string ext;
+		char file[128];
+		strcpy(file,arg[1]);
+		char *temp = strtok(file,".");
+		ext = strtok(NULL, ".");
+		ext = "."+ext;
+		arg[0] = (char *) op[ext].c_str();
+	}
 
-	// 	return;
-	// }
+	if(!strcmp(arg[0],"MEDIA"))
+	{
+		string format, runner; 
+		runner = arg[1];
+		format = arg[3];
+		op[format] = runner;
+		char *path = getenv("PATH");
+		if(!strstr(path,arg[2]))
+		{
+			char *temp = (char *)malloc(128 * sizeof(char));
+			strcpy(temp,path);
+			strcat(temp,":");
+			strcat(temp,arg[2]);
+			setenv("PATH",temp,1);
+		}
+		return;
+	}
 
 	if(flag["="])
 	{
@@ -544,7 +575,6 @@ void parse_and_excute()
     	arg[i] = temp2;
 	    arg[++i] = NULL;
     }
-
     execute_cmd(arg);
 }
 
@@ -594,35 +624,65 @@ void init()
 
 	char *temp4 = (char *) malloc(20 * sizeof(char));
 	strcpy(temp4, "TERM=xterm-256color");
+
+	char *temp5 = (char *) malloc(128 * sizeof(char));
+	strcpy(temp5,"DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus");
+
+	char *temp6 = (char *) malloc(128 * sizeof(char));
+	strcpy(temp6, "DISPLAY=:0");
+
+	char *temp7 = (char *) malloc(128 * sizeof(char));
+	strcpy(temp7, "XDG_RUNTIME_DIR=/run/user/1000");
 	
+
 	env[0] = temp2;
 	env[1] = temp;
 	env[2] =  h;
 	env[3] = temp3;
 	env[4] = temp1;
 	env[5] = temp4;
+	env[6] = temp5;
+	env[7] = temp6;
+	env[8] = temp7;
+
 	environ = env;
 
-	int rc;
+	FILE *rc;
 	char buf[1024];
 	char *line;
-	rc = open(".myrc",O_RDONLY);
-
-	while(fgets (str, 1024, rc))
+	line = (char *) malloc(1024 * sizeof(char));
+	rc = fopen(".myrc","r");
+	while(fgets(buf, 1024, rc) != NULL)
 	{
 		if(buf[0] == '\n')
     		continue;
-    	line = strtok(buf, "\n");
+    	if(buf[0] == EOF)
+    		break;
+    	line = strtok(buf,"\n");
     	char *cmd[128];
     	parse_command(cmd, line);
     	execute(cmd);
 	}
-	close(rc);
+	fclose(rc);
 }
 
 void prompt()
 {
+	char *temp1;
+	char cwd[4096];
+	getcwd(cwd, 4096);
+	char newps1[1024];
 	char *ps1 = getenv("PS1");
+	if(strstr(ps1,":"))
+	{
+		temp1 = strtok(ps1,":");
+		strcpy(newps1, temp1);
+		strcat(newps1,":");
+		strcat(newps1, cwd);
+		setenv("PS1",newps1,1);
+	}
+
+	ps1 = getenv("PS1");
 	cout << "\033[1;34m" << ps1 << "\033[0m";
 
 	if(getuid() == 0)
