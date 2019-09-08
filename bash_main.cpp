@@ -15,8 +15,10 @@ unordered_map<string, string> alias;
 unordered_map<string, string> variable;
 unordered_map<string, string> op;
 char *env[128];
-int fdh;
+char *ps1;
+int fdh, fds;
 int err = 0;
+char *out;
 
 int cnt_arg(char **arg)
 {
@@ -217,26 +219,77 @@ void execute(char **arg)
 		return;
 	}
 
+	if(!strcmp(arg[0],"record"))
+	{
+		if(!strcmp(arg[1],"start"))
+		{
+			fds = open("script.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			flag["r"] = 1;
+			err = 0;
+			if(flag["r"])
+				write(fds,"\n",1);
+		}
+		else if(!strcmp(arg[1],"stop"))
+		{
+			close(fds);
+			flag["r"] = 0;
+			err = 0;
+			if(flag["r"])
+				write(fds,"\n",1);
+		}
+		else
+		{
+			strcpy(out,"command not found!!\n");
+			if(flag["r"])
+			{
+				write(fds,out,strlen(out));
+				write(fds,"\n",1);
+			}
+			cout << out;
+           	err = 127;
+		}
+		return;
+	}
+
 	if(!strcmp(arg[0],"exit"))
 	{
-		cout << "exit" << endl;
+		strcpy(out,"exit\n");
+		if(flag["r"])
+		{
+			write(fds,out,strlen(out));
+			write(fds,"\n",1);
+		}
+		cout << out;
 		exit(0);
 	}
 
 	if(!strcmp(arg[0],"cd"))
 	{
-		print_cmd(arg);
 		if(cnt_arg(arg) > 2)
 		{
-			cout << "cd : too many arguments" << endl;
+			strcpy(out,"cd : too many arguments\n");
+			if(flag["r"])
+			{
+				write(fds,out,strlen(out));
+				write(fds,"\n",1);
+			}
+			cout << out;
 			err = 1;
 			return;
 		}
 		if(chdir(arg[1]) != 0)
 		{
-			cout << "cd: Assign: No such file or directory " << endl;
+			strcpy(out,"cd: Assign: No such file or directory\n");
+			if(flag["r"])
+			{
+				write(fds,out,strlen(out));
+				write(fds,"\n",1);
+			}
+			cout << out;
 			err = 1;
 		}
+		if(flag["r"])
+			write(fds,"\n",1);
 		err = 0;
 		return;
 	}
@@ -276,12 +329,18 @@ void execute(char **arg)
  				value = arg[2];
 				alias[key] = value;
 				err = 0;
+				if(flag["r"])
+					write(fds,"\n",1);
 			}	
 			else
 			{
-				cout << "usage:  alias variable='comand' : to assign alias" 
-			         << endl << "\talias variable : to check alias value" 
-			         << endl << "\talias -p : to print all value"<<endl;
+				strcpy(out,"usage:  alias variable='comand' : to assign alias\n\talias variable : to check alias value\n\talias -p : to print all value\n");
+				if(flag["r"])
+				{
+					write(fds,out,strlen(out));
+					write(fds,"\n",1);
+				}
+				cout << out;
 			    err = 127;
 			}	
 		}
@@ -291,8 +350,19 @@ void execute(char **arg)
 			{
 				for (auto i : alias)
 				{
-					cout << "alias " << i.first << "='" << i.second << "'" <<endl;
+					strcpy(out,"alias ");
+					strcat(out,(char *)i.first.c_str());
+					strcat(out,"='");
+					strcat(out,(char *)i.second.c_str());
+					strcat(out,"'\n");
+					if(flag["r"])
+					{
+						write(fds,out,strlen(out));
+					}
+					cout << out;
 				}
+				if(flag["r"])
+					write(fds,"\n",1);
 				err = 0;
 			}
 			else if(cnt == 2)
@@ -303,23 +373,49 @@ void execute(char **arg)
 				{
 					for (auto i : alias)
 					{
-						cout << "alias " << i.first << "='" << i.second << "'" <<endl;
-
+						strcpy(out,"alias ");
+						strcat(out,(char *)i.first.c_str());
+						strcat(out,"='");
+						strcat(out,(char *)i.second.c_str());
+						strcat(out,"'\n");
+						if(flag["r"])
+						{
+							write(fds,out,strlen(out));
+						}
+						cout << out;
 					}
+					if(flag["r"])
+						write(fds,"\n",1);
 					err = 0;
 				}
 				else
 				{
 					if(alias.find(key) != alias.end())
 					{
-						cout << "alias " << key << "='" << alias[key] << "'" <<endl;
+						strcpy(out,"alias ");
+						strcat(out,(char *)key.c_str());
+						strcat(out,"='");
+						strcat(out,(char *)alias[key].c_str());
+						strcat(out,"'\n");
+						if(flag["r"])
+						{
+							write(fds,out,strlen(out));
+							write(fds,"\n",1);
+						}
+						cout << out;
 						err = 0;
 					}
 					else
 					{
-						cout << "usage:  alias variable='comand' : to assign alias" 
-					         << endl << "\talias variable : to check alias value" 
-					         << endl << "\talias -p : to print all value"<<endl;
+						strcpy(out,"alias: ");
+						strcat(out,(char *) key.c_str());
+						strcat(out,": not found\n");
+						if(flag["r"])
+						{
+							write(fds,out,strlen(out));
+							write(fds,"\n",1);
+						}
+						cout << out;
 					    err = 127;
 					}	
 				}
@@ -327,9 +423,13 @@ void execute(char **arg)
 			}
 			else
 			{
-				cout << "usage:  alias variable='comand' : to assign alias" 
-				<< endl << "\talias variable : to check alias value" 
-				<< endl << "\talias -p : to print all value"<<endl;
+				strcpy(out,"usage:  alias variable='comand' : to assign alias\n\talias variable : to check alias value\n\talias -p : to print all value\n");
+				if(flag["r"])
+				{
+					write(fds,out,strlen(out));
+					write(fds,"\n",1);
+				}
+				cout << out;
 				err = 127;
 			}
 		}
@@ -364,6 +464,8 @@ void execute(char **arg)
 			setenv("PATH",temp,1);
 		}
 		err = 0;
+		if(flag["r"])
+				write(fds,"\n",1);
 		return;
 	}
 
@@ -388,10 +490,18 @@ void execute(char **arg)
 			else	
 				variable[var] = val;
 			err = 0;
+			if(flag["r"])
+				write(fds,"\n",1);
 		}
 		else
 		{
-			cout <<"Command not found!!" << endl;
+			strcpy(out,"Command not found!!\n");
+			if(flag["r"])
+			{
+				write(fds,out,strlen(out));
+				write(fds,"\n",1);
+			}
+			cout << out;
 			err = 127;
 		}
 		return;
@@ -569,7 +679,7 @@ void execute_cmd(char **arg)
 		char *cmd[128];
 		parse_command(cmd, arg[0]);
 		char *file[128];
-		parse_command(file, arg[1]);
+		parse_command(file, arg[1]);	
 		redirection(cmd, file); 
 	}
 	else
@@ -580,11 +690,12 @@ void execute_cmd(char **arg)
 	}
 }
 
-void parse_and_excute()
+void parse_and_execute()
 { 	
 	char *arg[128];
 	char buf[1024];
    	char *input; 
+   	char *scr = (char *) malloc(1024 * sizeof(char));
    	char *temp1, *temp2;
     int i = 0;
     fgets(buf, 1024, stdin);
@@ -594,7 +705,14 @@ void parse_and_excute()
 
     if(flag["s"])
     	return;
-
+    
+    if(flag["r"])
+    {	
+    	strcpy(scr, ps1);
+    	strcat(scr, buf);
+    	write(fds, scr, strlen(scr));	
+    }
+    
     write(fdh, buf, strlen(buf));
     input = strtok(buf, "\n");
 
@@ -628,7 +746,58 @@ void parse_and_excute()
     	arg[i] = temp2;
 	    arg[++i] = NULL;
     }
-    execute_cmd(arg);
+	
+	if(strstr(arg[0],"record") || strstr(arg[0],"exit") 
+	|| strstr(arg[0],"cd") || strstr(arg[0],"alias") 
+	|| strstr(arg[0],"MEDIA") || strstr(arg[0],"=") )
+	{
+		execute_cmd(arg);
+		return;
+	}
+
+	else if(flag["r"])
+    {
+    	int fd[2];
+		char buf1[1024], buf2[1024];
+		if (pipe(fd)==-1) 
+	    { 
+	        cout << "Pipe failed" << endl; 
+	        return; 
+	    } 
+		pid_t rid = fork();
+		if(rid == -1)
+		{
+			cout << "Process creation failed!!" << endl;
+		} 
+		else if(rid == 0)
+		{
+			close(fd[0]); 
+	        dup2(fd[1], STDOUT_FILENO); 
+	        close(fd[1]);
+	    	execute_cmd(arg);
+		    exit(err);
+		}
+		else
+		{
+			int lenOut, e;
+			close(fd[1]);
+			wait(&e);
+			err = WEXITSTATUS(e);
+
+			while((lenOut = read(fd[0], buf1, 1023)) > 0)
+			{
+				buf1[lenOut] = '\0';
+				strcpy(buf2,buf1);
+				write(fds, buf1, lenOut);
+				write(1, buf2,lenOut);
+			}
+			write(fds,"\n",1);
+			close(fd[0]);
+			return;
+		}
+    }
+    else
+		execute_cmd(arg);    
 }
 
 void init()
@@ -641,6 +810,9 @@ void init()
 	cout << "*****************************************************************************" << endl;
 	cout << endl;
 
+	ps1 = (char *) malloc(1024 * sizeof(char)); 
+	out = (char *) malloc(4096 * sizeof(char));
+	flag["r"] = 0;
 	fdh = open("history.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
 	struct passwd *p;
 	int u;
@@ -724,24 +896,22 @@ void prompt()
 	char *temp1;
 	char cwd[4096];
 	getcwd(cwd, 4096);
-	char newps1[1024];
-	char *ps1 = getenv("PS1");
-	if(strstr(ps1,":"))
+	char *ps = getenv("PS1");
+	if(strstr(ps,":"))
 	{
-		temp1 = strtok(ps1,":");
-		strcpy(newps1, temp1);
-		strcat(newps1,":");
-		strcat(newps1, cwd);
-		setenv("PS1",newps1,1);
+		temp1 = strtok(ps,":");
+		strcpy(ps1, temp1);
+		strcat(ps1,":");
+		strcat(ps1, cwd);
+		setenv("PS1",ps1,1);
 	}
 
-	ps1 = getenv("PS1");
-	cout << "\033[1;34m" << ps1 << "\033[0m";
-
 	if(getuid() == 0)
-		cout << "#";
+		strcat(ps1, "# ");
 	else
-		cout << "$ ";
+		strcat(ps1, "$ ");
+
+	cout << "\033[1;34m" << ps1 << "\033[0m";
 
 	flag["|"] = 0;
 	flag[">>"] = 0;
@@ -752,10 +922,16 @@ void prompt()
 
 void signal_handler( int signal_num ) 
 { 
-   signal(signal_num, signal_handler);
-   cout << endl << "The interrupt signal is (" << signal_num << ")." << endl;
-   flag["s"] = 1;
-   return;
+   	signal(signal_num, signal_handler);
+   	strcpy(out,"\nKeyboard Interrupt\n");
+   	if(flag["r"])
+	{
+		write(fds,out,strlen(out));
+		write(fds,"\n",1);
+	}	
+   	cout << out;
+  	flag["s"] = 1;
+   	return;
 }
 
 int main()
@@ -765,7 +941,7 @@ int main()
 	while(1)
 	{
 		prompt();
-		parse_and_excute();
+		parse_and_execute();
 	}
 	return 0;	
 }
