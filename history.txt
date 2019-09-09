@@ -1,666 +1,125 @@
-ls | wc
 ls
-cat a.txt
-rm a.txt
-ls
-rm b.txt
-cat test
-rm test
-ls
-cat > a.txt
-cat a.txt
-cat a.txt | sort | uniq | wc
+ps
+alarm 15
 exit
-cat a.txt | sort | uniq | wc
-cat a.txt catcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcatcat a.txt | sort | uniq | wc
-cat a.txt | sort | uniq | wc
-clear
-printenv
-echo $PATH
-echo PATH
-clear
-echo "$PATH  "
-echo "$HOME "
-echo "$PATH "
-echo $PATH
-echo $HOME
-echo $PS1
-echo $PATH
-a
+alarm 10
+alarm 5
+alarm 15
+alarm 20
+exit
+alarm 15
+alarm 20
+alarm 25
+alarm 30
+exit
+alarm 20
+alarm 30
+alarm 15
+alarm 35
+exit
+alarm 5
+alarm 10
+alarm 15
+exit'
+alarm 10
+alarm 15
+alarm 20
+exit
+exit
+alarm 15
+alarm 20
+alarm 30
+exit
+exit
+exit
 alias
-echo $PS1
-a
-exit
-echo $HOSTNAME
-echo $USER
-echo $PS1
-a.out
-./a.out
-echo $HOSTNAME
-echo $PS1
-echo $PS!
-echo $PS1
-exit
-PS1=1
-echo $PS1
-echo $HOME
-HOME=a
-echo $HOME
-exit
-$USER
-echo $USER
-printenv
-exit
-echo %USER
-echo $USER
-printenv
-echo $USER
-USER=3
-echo $USER
-exit
-printenv
-printenv
-printenv
-echo $PATH
-echo $PATH
-printenv
-echo $PATH
-echo $PATH
-printenv
-echo $PATH
-echo $PATH
-echo $PATH
-echo $PATH
-printenv
-echo $PS1
-PS1=a
-printenv
-exit
-MEDIA=[a,b,c]
-MEDIA=[a,b,c]
-MEDIA=[a,b,c]
-MEDIA=[a,b,c]
-MEDIA=[a,b,c]
-MEDIA=['a','b','c
-MEDIA=['a','b','c]
-MEDIA=['a','b','c]
-MEDIA=['a','b','c]
-MEDIA=['a','b','c]
-MEDIA=['a','b','c]
-MEDIA=['a','b','c]
-MEDIA=['a','b','c]
-MEDIA=['a','b','c]
-MEDIA=['a','b','c]
-MEDIA=['a','b','c]
-MEDIA=['a','b','c]
-MEDIA=['abc','dfg','.dfg']
-MEDIA=['vlc','/usr/bin','.mp4']
-open /home/smit/Downloads/endgame.mp4
-vlc /home/smit/Downloads/endgame.mp4
-$PATH
-echo $PATH
-printenv
-MEDIA=['vlc','/usr/bin','.mp4']
-echo $PATH
-MEDIA=['vlc','/usr/bin/','.mp4']
-echo $PATH
-MEDIA=['vlc','/usr/bin/hello','.mp4']
-echo $PATH
-echo $PATH
-MEDIA=['vlc','/usr/bin/','.mp4']
-echo $PATH
-MEDIA=['vlc','/usr/bin','.mp4']
-echo $PATH
-open /home/smit/Downloads/endgame.mp4
-open endgame.mp4
-open endgame.mp4
-open endgame.mp4
-MEDIA=['vlc','/usr/bin/','.mp4']
-open endgame.mp4
-open endgame.mp4
-open endgame.mp4
-open endgame.mp4
-open endgame.mp4
-open endgame.mp4
-MEDIA=['vlc','/usr/bin/','.mp4']
-open endgame.mp4
-MEDIA=['vlc','/usr/bin/','.mp4']
-open endgame.mp4
-sudo su
-cd ..
-cd ..
-cd .
-exit
-cd ..
-cd ..
-cd ..
-exit
-cd
-cd .
-cd ..
-cd /home/
-cd ..
-ls
-cd ..
-printenv
-cd ..
-cd .
-cd
-cd ..
-cd /home
-clear
-history
-history
-MEDIA=['vlc','/bin/,'.mp4']
-open endgame.mp4
-vlc endgame.mp4
-alias
-alias
-echo $x
-echo $y
-echo $z
-printenv
-alias
-echo $x
-echo $y
-open endgame.mp4
-clear
-pwd
-exit
-printenv
-printenv grep "HOME"
-ll
-la
 l
-echo $x $y
-echo $.mp3
-clear
-exit
+la
+PS1=dhama
+printenv
+PS1=dhamo
+alias lll='ls -l'
+lll
 echo $$
-./aout
-./a.out
-echo $$
-./a.out
-echo $$
-exit
-echo $$
-exit
-echo $$
-exit
-ls | wc
 echo $?
-laa
+ls sjfkhdksjfh
 echo $?
-ls -hh
-cat op
-echo $?
-jk
-echo $?
-ls -e
-echo $?
-a > a.txt
-cat a.txt
-a = aa ds 
-echo $?
-e > a.txt
-echo > /ddd?
-sdff
-echo je > /as/a
-echo je > /as/s
-echo $?
-e > /as/a
-e > a
-cat a
-clear
-echo $?
-exit
-a > a
-echo $e?
-echo $?
-a > a
-a > a
-rm a
-a > a
-echo $?
-cat a
-exit
-echo ~
-x=~
-echo $x
-echo $y
-echo $z
-z=$y
-echo $z
-clear
-exit
+ls
+cd try.cpp a
+cp try.cpp a
+ls
+history
 record start
 echo hello
+echo dhama
+echo hello divy
+echo bye
 record stop
-exit
-exit
-cd ..
-cd ..
-cd ..
-exit
-record start
-echo hello
-ls
-alias ls=ls
-ls
-ls -al
-alias
-exit
-stop record
-record stop
-alias
-exit
-exit
 record start
 echo hello
 echo bye
-exit
-script start
-record start
-echo hello
-record start
-echo hello
-ls
-echo bye
-exit
-record start
-echo hello
-record start
-echo hello
-exit
-record start
-ls -al
-ls
-exit
-record statrt
-record start
-echo hello
-ls
-exit
-record script
-record start
-echo hello
-ls
-echo hello
-record start
-echo hello
-record start
-echo hello
-exit
-record start
-echo hello
-alias
-record start
-ls
-echo hello
-record start
-echo hello
-ls
-exit
-ls
-echo hello
-copy
-record start
-echo hello
-rrecord stop
-record stop
-echo hello
-record start
-ls
-echo hello hsjkd fkdfkhdkhfkdkhf dkhfhkd hkhf
-ls | wc
-ls -al
-ls > a.txt
-exit
-record stop
-exit
-exit
-record start
-cd ..
-exit
-record start
-exit
-record start
-echo hello
-alias
-ls
-ls -al
-record stop
-echo hello
-echo bye
-exit
-record start
-echo hello
-ls
-record stop
-exit
-record start
-ls
 record stop
 exit
 record start
 echo hello
-ls
 record stop
-echo bye
-exit
-record dd
-alias
-alias a=b
-alias b=ls
-a
-b
-exit
-record start
-record ss
-cd dd dd
-alias
-record stop
-record start
-record d
-cd aa a
-cd aa
-cd ..
-alias ass aa aa
-alias a a
-alias a
-alias
-alias a=ls
-a
-alias
-v=2 s
-v=3
-echo $v
-echo $v
 echo $x
-v=3
-echo $x
-echo $v
-exit
-v=5
-echo $v
-record start
-echo $v
-z=6
-echo $z
-ls
-ls
-echo hello
-record start
-v=5
-echo $v
-z=0
-echo $z
-exit
-record start
-v=5
-echo $v
-echo hello
-record stop
-exit
-export
-printenv
-environ
-export
-export x
-export
-export
-echo $x
-export x
-export
-export
-export x
-printenv
-printenv
-export x
-printenv
-echo 4x
-printenv
-export x
-printenv
-export x
-export
-export x
-echo $x
-export
-export x
-printenv
-export
-export
-export x
-export
-EXPORT
-export
-export x
-export
-export
-export x
-x=20
-export
-./a.out
-echo $x
-export
-printenv
-exit
-./a.out
-export
-exit
-exit
-./a.out
-./a.out
-exit
-exit
-./a.out
-exit
-exit
-printenv
-export x
-printenv
-./a.out
-printenv
-x=20
-printenv
-echo $z
-echo $y
-exit
-printenv
-export
-export x
-./a.out
-export
-export x
-echo $x
-./a.out
-./a.out
-./a.out
-./a.out
-exit
-export
-export x
-./a.out
-echo $y
-export
-export x
-export
-./a.out
-export
-echo $y
-alias
-echo $x
-echo $y
-echo $z
-exit
-echo $x $y $z
-export x
-export
-x=20
-export
-./a.out
-echo $y
-echo $z
-echo $x
-exit
-./a.out
-exit
-exit
-echo $x
-export x
-export
-x=3
-export
-y=5
-./a.out
-export
-$x
-echo $x
-echo $y
-exit
-exit
-export
-export x
-exho $y
-echo $y
-./a.out
-export
-echo $y
-z=6
-echo $z
-./a.out
-echo $z
-export
-./a.out
-echo $x
-echo $y
-echo $z
-exit
-export x
-export
-x=20
-echo $x
-./a.out
-echo $x
-export
-./a.out
-echo $z
-export
-x=20
-export x
-export
-echo $x
-echo $y4
-echo $x
-export
-export x
-x=20
-export
-echo $x
-./a.out
-export x
-./a.out
-x=5
-export
-y=5
-export x
-./a.out
-exit
-./a.out
-exit
-./a.out
-./a.out
-exit
-./a.out
-./a.out
-exit
-./a.out
-./a.out
-exit
-exit
-exit
-./a.out
-./a.out
-./a.out
-exit
-./a.out
-printenv
-./a.out
-./a.out
-./a.out
-./a.out
-./a.out
-./a.out
-exit
-echo $x
-echo $y
-./a.out
-echo $x
-echo $y
-exit
-export x
-x=20
-./a.out
-echo $x
-echo $y
-z=12
-echo $z
-export z
-export
-printenv
-./a.out
-echo $x
-echo $y
-echo $z
-y=20
-export y
-printenv
-exit
-printenv
-echo $y
-exit
-echo $z
-echo $x
-exit
-export
-x=5
-export x
-export
-./a.out
-export
-exit
-exit
-echo $x
-echo $y
-x=20
-export
-export x
-export
-./a.out
-echo $x
-echo $y
-echo $x
-echo $y
-echo $x
-export
-echo $x
-x=20
-export x
-echo $x
-export
-./a.out
-echo $x
-echo $y
-exit
+x=1
 y=2
-export $y
 z=3
-echo $x $y $z
+export x
+export
+x=11
+export
 ./a.out
-echo $x $y $z
-y=30
-echo $x $y $z
+export
+echo $x
+echo $y
+echo $z
+a=1
+export a
+export
+./a.out
+echo $x $a
+alarm 5
+alarm 10
 exit
-echo $x $y $z
+alarm 10
+alarm 15
+exit
+exit
+ls | wc
+ls | wc > a
+cat a
+ls
+cat a
+ls | wc
+ls | wc > a
+cat a
+ls | wx
+ls | wc
+ls | wc >> a.txt
+cat a.txt
+ls
+gedit b.txt
+cat b.txt | sort | uniq 
+cat b.txt|sort|uniq > a.txt
+cat a.txt
+cat b.txt
+cat b.txt|sort|uniq > a.txt
+cat a.txt
+cat b.txt|sort|uniq > a.txt
+cat b.txt|sort|u
+cat b.txt | sort | uniq
+cat a.txt
+cat b.txt | sort | uniq | wc > a.txt
+cat a.txt
+PS1=riya
+exit
+open history.txt
+open "001 001.jpg"
+open 1.jpg
+open 1.jpg
+open 1.jpg
+open ValueCertificate.pdf
 exit

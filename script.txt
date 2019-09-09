@@ -1,9 +1,4 @@
 
-smit@smit-Lenovo-B570:/home/smit/Study/OS/Assignment_1/Code$ v=5
-
-smit@smit-Lenovo-B570:/home/smit/Study/OS/Assignment_1/Code$ echo $v
-5
-
 smit@smit-Lenovo-B570:/home/smit/Study/OS/Assignment_1/Code$ echo hello
 hello
 

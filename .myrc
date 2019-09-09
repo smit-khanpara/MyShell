@@ -8,6 +8,6 @@ alias la='ls -A'
 alias l='ls -CF'
 
 MEDIA=['vlc','/usr/bin','.mp4']
-
-
-
+MEDIA=['gedit','/usr/bin','.txt']
+MEDIA=['evince','/usr/bin','.pdf']
+MEDIA=['eog','/usr/bin/eog','.jpg']

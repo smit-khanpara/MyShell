@@ -766,8 +766,7 @@ void pipe(char **arg)
     	int wfptr, lenOut;
     	char *file[128];
     	parse_command(file, arg[cnt]);
-    	cout << file[0];
-		if(flag[">"])
+    	if(flag[">"])
 			wfptr = open(file[0], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		else
 			wfptr = open(file[0], O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -1050,6 +1049,8 @@ void prompt()
 		strcat(ps1, cwd);
 		setenv("PS1",ps1,1);
 	}
+	else
+		strcpy(ps1,ps);
 
 	if(getuid() == 0)
 		strcat(ps1, "# ");
