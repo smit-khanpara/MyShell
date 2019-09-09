@@ -402,3 +402,265 @@ echo $v
 echo hello
 record stop
 exit
+export
+printenv
+environ
+export
+export x
+export
+export
+echo $x
+export x
+export
+export
+export x
+printenv
+printenv
+export x
+printenv
+echo 4x
+printenv
+export x
+printenv
+export x
+export
+export x
+echo $x
+export
+export x
+printenv
+export
+export
+export x
+export
+EXPORT
+export
+export x
+export
+export
+export x
+x=20
+export
+./a.out
+echo $x
+export
+printenv
+exit
+./a.out
+export
+exit
+exit
+./a.out
+./a.out
+exit
+exit
+./a.out
+exit
+exit
+printenv
+export x
+printenv
+./a.out
+printenv
+x=20
+printenv
+echo $z
+echo $y
+exit
+printenv
+export
+export x
+./a.out
+export
+export x
+echo $x
+./a.out
+./a.out
+./a.out
+./a.out
+exit
+export
+export x
+./a.out
+echo $y
+export
+export x
+export
+./a.out
+export
+echo $y
+alias
+echo $x
+echo $y
+echo $z
+exit
+echo $x $y $z
+export x
+export
+x=20
+export
+./a.out
+echo $y
+echo $z
+echo $x
+exit
+./a.out
+exit
+exit
+echo $x
+export x
+export
+x=3
+export
+y=5
+./a.out
+export
+$x
+echo $x
+echo $y
+exit
+exit
+export
+export x
+exho $y
+echo $y
+./a.out
+export
+echo $y
+z=6
+echo $z
+./a.out
+echo $z
+export
+./a.out
+echo $x
+echo $y
+echo $z
+exit
+export x
+export
+x=20
+echo $x
+./a.out
+echo $x
+export
+./a.out
+echo $z
+export
+x=20
+export x
+export
+echo $x
+echo $y4
+echo $x
+export
+export x
+x=20
+export
+echo $x
+./a.out
+export x
+./a.out
+x=5
+export
+y=5
+export x
+./a.out
+exit
+./a.out
+exit
+./a.out
+./a.out
+exit
+./a.out
+./a.out
+exit
+./a.out
+./a.out
+exit
+exit
+exit
+./a.out
+./a.out
+./a.out
+exit
+./a.out
+printenv
+./a.out
+./a.out
+./a.out
+./a.out
+./a.out
+./a.out
+exit
+echo $x
+echo $y
+./a.out
+echo $x
+echo $y
+exit
+export x
+x=20
+./a.out
+echo $x
+echo $y
+z=12
+echo $z
+export z
+export
+printenv
+./a.out
+echo $x
+echo $y
+echo $z
+y=20
+export y
+printenv
+exit
+printenv
+echo $y
+exit
+echo $z
+echo $x
+exit
+export
+x=5
+export x
+export
+./a.out
+export
+exit
+exit
+echo $x
+echo $y
+x=20
+export
+export x
+export
+./a.out
+echo $x
+echo $y
+echo $x
+echo $y
+echo $x
+export
+echo $x
+x=20
+export x
+echo $x
+export
+./a.out
+echo $x
+echo $y
+exit
+y=2
+export $y
+z=3
+echo $x $y $z
+./a.out
+echo $x $y $z
+y=30
+echo $x $y $z
+exit
+echo $x $y $z
+exit

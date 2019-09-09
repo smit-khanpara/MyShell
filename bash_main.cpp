@@ -47,6 +47,7 @@ void print_cmd(char **cmd)
 
 void resolve_var(char **cmd)
 {
+
 	int k = 0;
 	while(cmd[k])
 	{
@@ -73,17 +74,10 @@ void resolve_var(char **cmd)
 			{
 				string str;
 				str = cmd[k];
-				if(str == "$HOME")
-					cmd[k] = getenv("HOME");
-				else if(str == "$PATH")
-					cmd[k] = getenv("PATH");
-				else if(str == "$PS1")
-					cmd[k] = getenv("PS1");
-				else if(str == "$HOSTNAME")
-					cmd[k] = getenv("HOSTNAME");
-				else if(str == "$USER")
-					cmd[k] = getenv("USER");
-				else
+				char *temp = (char *)malloc(64 * sizeof(char));
+				temp = strtok(cmd[k],"$");
+				cmd[k] = getenv(temp);
+				if(!cmd[k])
 					cmd[k] = (char *)variable[str].c_str();
 			}
 		}
@@ -217,6 +211,68 @@ void execute(char **arg)
 		cmd[cnt] = NULL;
 		execute(cmd);
 		return;
+	}
+
+	if(!strcmp(arg[0],"export"))
+	{
+		int cnt = cnt_arg(arg);
+		if(cnt > 2)
+		{
+			strcpy(out,"export : too many arguments\n");
+			if(flag["r"])
+			{
+				write(fds,out,strlen(out));
+				write(fds,"\n",1);
+			}
+			cout << out;
+			err = 1;
+			return;
+		}
+		else if(cnt == 1)
+		{
+			char **e = environ;
+			for(int i=0; e[i]; i++)
+			{
+				strcpy(out,"declare -x ");
+				strcat(out,e[i]);
+				strcat(out,"\n");
+				cout << out;
+				if(flag["r"])
+					write(fds,out,strlen(out));
+			}
+			if(flag["r"])
+				write(fds,"\n",1);
+			err = 0;
+			return;
+		}
+		else
+		{
+			string key;
+			char *temp = (char *) malloc(16 * sizeof(char));
+			key = arg[1];
+			key = "$"+key;
+			strcpy(temp,arg[1]);
+			strcat(temp,"=");
+			if(variable.find(key)!=variable.end())
+			{
+				strcat(temp,(char *) variable[key].c_str());
+				if(!getenv(arg[1]));
+				{
+					putenv(temp); 
+				}
+			}
+			else
+			{
+				strcat(temp," ");
+				putenv(temp);
+			}
+	
+			if(flag["r"])
+				write(fds,"\n",1);
+			err = 0;
+			return;
+		}
+
 	}
 
 	if(!strcmp(arg[0],"record"))
@@ -477,18 +533,10 @@ void execute(char **arg)
 			var = arg[0];
 			var = "$"+var;
 			val = arg[1];
-			if(var == "$HOME")
-				setenv("HOME",arg[1],1);
-			else if(var == "$PATH")
-				setenv("PATH",arg[1],1);
-			else if(var == "$PS1")
-				setenv("PS1",arg[1],1);
-			else if(var == "$HOSTNAME")
-				setenv("HOSTNAME",arg[1],1);
-			else if(var == "$USER")
-				setenv("USER",arg[1],1);
-			else	
-				variable[var] = val;
+			if(getenv(arg[0]))
+				setenv(arg[0],arg[1],1);	
+			
+			variable[var] = val;
 			err = 0;
 			if(flag["r"])
 				write(fds,"\n",1);
@@ -520,7 +568,6 @@ void execute(char **arg)
            cout <<"command not found!!" << endl;
            exit(127);
 	    }
-	    return;
 	}
 	else
 	{
@@ -810,68 +857,75 @@ void init()
 	cout << "*****************************************************************************" << endl;
 	cout << endl;
 
-	ps1 = (char *) malloc(1024 * sizeof(char)); 
+
+	fdh = open("history.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
 	out = (char *) malloc(4096 * sizeof(char));
 	flag["r"] = 0;
-	fdh = open("history.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
-	struct passwd *p;
-	int u;
-	u = geteuid();
-  	p = getpwuid(u);
-	
-	char *host = (char *) malloc(128 * sizeof(char));
-	char *h = (char *) malloc(128 * sizeof(char));
-	gethostname(host, 128);
-	strcpy(h, "HOSTNAME=");
-	strcat(h, host);
+	ps1 = (char *) malloc(1024 * sizeof(char)); 
 
-	char *temp2 = (char *) malloc(128 * sizeof(char));
-	strcpy(temp2,"HOME=");
-	strcat(temp2,p->pw_dir);
-	
-	char *temp3 = (char *) malloc(128 * sizeof(char)); 
-	strcpy(temp3,"USER=");
-	strcat(temp3, p->pw_name);
-	
-	char *temp = (char *) malloc(1024 * sizeof(char));
-	strcpy(temp,"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games");
-	
-	char *temp1 = (char *) malloc(2048 * sizeof(char));
-	char cwd[4096];
-	getcwd(cwd, 4096);
-	strcpy(temp1,"PS1=");
-	strcat(temp1, p->pw_name);
-	strcat(temp1, "@");
-	strcat(temp1, host);
-	strcat(temp1, ":");
-	strcat(temp1, cwd);
-	strcat(temp1,"\0");
+	if(!getenv("XIDCON_IdentifyChildorNot"))
+	{
+		struct passwd *p;
+		int u;
+		u = geteuid();
+	  	p = getpwuid(u);
+		
+		char *host = (char *) malloc(128 * sizeof(char));
+		char *h = (char *) malloc(128 * sizeof(char));
+		gethostname(host, 128);
+		strcpy(h, "HOSTNAME=");
+		strcat(h, host);
 
-	char *temp4 = (char *) malloc(20 * sizeof(char));
-	strcpy(temp4, "TERM=xterm-256color");
+		char *temp2 = (char *) malloc(128 * sizeof(char));
+		strcpy(temp2,"HOME=");
+		strcat(temp2,p->pw_dir);
+		
+		char *temp3 = (char *) malloc(128 * sizeof(char)); 
+		strcpy(temp3,"USER=");
+		strcat(temp3, p->pw_name);
+		
+		char *temp = (char *) malloc(1024 * sizeof(char));
+		strcpy(temp,"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games");
+		
+		char *temp1 = (char *) malloc(2048 * sizeof(char));
+		char cwd[4096];
+		getcwd(cwd, 4096);
+		strcpy(temp1,"PS1=");
+		strcat(temp1, p->pw_name);
+		strcat(temp1, "@");
+		strcat(temp1, host);
+		strcat(temp1, ":");
+		strcat(temp1, cwd);
+		strcat(temp1,"\0");
 
-	char *temp5 = (char *) malloc(128 * sizeof(char));
-	strcpy(temp5,"DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus");
+		char *temp4 = (char *) malloc(20 * sizeof(char));
+		strcpy(temp4, "TERM=xterm-256color");
 
-	char *temp6 = (char *) malloc(128 * sizeof(char));
-	strcpy(temp6, "DISPLAY=:0");
+		char *temp5 = (char *) malloc(128 * sizeof(char));
+		strcpy(temp5,"DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus");
 
-	char *temp7 = (char *) malloc(128 * sizeof(char));
-	strcpy(temp7, "XDG_RUNTIME_DIR=/run/user/1000");
-	
+		char *temp6 = (char *) malloc(128 * sizeof(char));
+		strcpy(temp6, "DISPLAY=:0");
 
-	env[0] = temp2;
-	env[1] = temp;
-	env[2] =  h;
-	env[3] = temp3;
-	env[4] = temp1;
-	env[5] = temp4;
-	env[6] = temp5;
-	env[7] = temp6;
-	env[8] = temp7;
+		char *temp7 = (char *) malloc(128 * sizeof(char));
+		strcpy(temp7, "XDG_RUNTIME_DIR=/run/user/1000");
 
-	environ = env;
+		char *temp8 = (char *) malloc(32 * sizeof(char));
+		strcpy(temp8, "XIDCON_IdentifyChildorNot=1");
+		
+		env[0] = temp2;
+		env[1] = temp;
+		env[2] =  h;
+		env[3] = temp3;
+		env[4] = temp1;
+		env[5] = temp4;
+		env[6] = temp5;
+		env[7] = temp6;
+		env[8] = temp7;
+		env[9] = temp8;
 
+		environ = env;
+	}
 	FILE *rc;
 	char buf[1024];
 	char *line;
@@ -893,14 +947,14 @@ void init()
 
 void prompt()
 {
-	char *temp1;
+	char *t;
 	char cwd[4096];
 	getcwd(cwd, 4096);
 	char *ps = getenv("PS1");
 	if(strstr(ps,":"))
 	{
-		temp1 = strtok(ps,":");
-		strcpy(ps1, temp1);
+		t = strtok(ps,":");
+		strcpy(ps1, t);
 		strcat(ps1,":");
 		strcat(ps1, cwd);
 		setenv("PS1",ps1,1);
