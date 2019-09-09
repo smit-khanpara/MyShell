@@ -8,12 +8,15 @@
 #include<vector>
 #include<unordered_map>
 #include <pwd.h>
+#include<ctime> 
+#include<vector>
 using namespace std;
 extern char **environ;
 unordered_map<string, int> flag;
 unordered_map<string, string> alias;
 unordered_map<string, string> variable;
 unordered_map<string, string> op;
+vector<pair<int,long int>> alrm;
 char *env[128];
 char *ps1;
 int fdh, fds;
@@ -316,7 +319,76 @@ void execute(char **arg)
 			write(fds,"\n",1);
 		}
 		cout << out;
+		string str;
+		char *ar = (char *) malloc(32 * sizeof(char));
+		int al = open("alarm.txt", O_WRONLY | O_CREAT | O_APPEND, 0644);
+		time_t t = std::time(0);
+		long int now = static_cast<long int> (t);
+		for(auto i : alrm)
+		{
+			if(i.second > now)
+			{
+				strcpy(ar,"");
+				str = to_string(i.first);
+				strcat(ar, (char *) str.c_str());
+				strcat(ar, " ");
+				str = to_string(i.second);
+				strcat(ar, (char *) str.c_str());
+				strcat(ar, "\n");
+				write(al,ar,strlen(ar));				
+			}
+		}
+
+		pid_t pid = getpid();
+		pid_t pgid = getpgid(pid);
+		killpg(pgid,SIGTERM);
 		exit(0);
+	}
+
+	if(!strcmp(arg[0],"alarm"))
+	{
+		int cnt = cnt_arg(arg);
+		if(cnt == 2)
+		{
+			int al;
+			sscanf(arg[1], "%d", &al);
+			pair<int,long int> te;
+			te.first = al;
+			time_t t = std::time(0);
+			long int old = static_cast<long int> (t);
+			old = old + al;
+			te.second = old;
+			alrm.push_back(te);
+
+			int rid = fork();
+			if(rid == -1)
+			{
+			    cout << "Process creation failed!!" << endl;
+			} 
+			else if(rid == 0)
+			{
+			    long int now = static_cast<long int> (t);
+			    while(old > now)
+			    {
+			        sleep(1);
+			        now++;
+			    }
+			    cout << "alarm at : " << al << endl;
+			}
+		}
+		else
+		{
+			strcpy(out,"usage: alarm value\n");
+			if(flag["r"])
+			{
+				write(fds,out,strlen(out));
+				write(fds,"\n",1);
+			}
+			cout << out;
+			err = 1;
+		}
+		err = 0;
+		return;
 	}
 
 	if(!strcmp(arg[0],"cd"))
@@ -926,6 +998,7 @@ void init()
 
 		environ = env;
 	}
+
 	FILE *rc;
 	char buf[1024];
 	char *line;
@@ -941,6 +1014,19 @@ void init()
     	char *cmd[128];
     	parse_command(cmd, line);
     	execute(cmd);
+	}
+	fclose(rc);
+
+	buf[1024];
+	line = (char *) malloc(1024 * sizeof(char));
+	rc = fopen("alarm.txt","r");
+	while(fgets(buf, 1024, rc) != NULL)
+	{
+    	cout << "Missed alarm at ";
+    	line = strtok(buf," ");
+    	cout << line << " ";
+    	line = strtok(NULL,"\n");
+    	cout << line << endl;    	
 	}
 	fclose(rc);
 }
