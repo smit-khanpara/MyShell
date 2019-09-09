@@ -1017,18 +1017,23 @@ void init()
 	}
 	fclose(rc);
 
-	buf[1024];
-	line = (char *) malloc(1024 * sizeof(char));
-	rc = fopen("alarm.txt","r");
-	while(fgets(buf, 1024, rc) != NULL)
+	FILE *file;
+	if((file = fopen("alarm.txt","r"))!=NULL)
 	{
-    	cout << "Missed alarm at ";
-    	line = strtok(buf," ");
-    	cout << line << " ";
-    	line = strtok(NULL,"\n");
-    	cout << line << endl;    	
+		buf[1024];
+		line = (char *) malloc(1024 * sizeof(char));
+		rc = fopen("alarm.txt","r");
+		while(fgets(buf, 1024, rc) != NULL)
+		{
+	    	cout << "Missed alarm at ";
+	    	line = strtok(buf," ");
+	    	cout << line << " ";
+	    	line = strtok(NULL,"\n");
+	    	cout << line << endl;    	
+		}
+		fclose(rc);
+		remove("alarm.txt");
 	}
-	fclose(rc);
 }
 
 void prompt()
